@@ -1,16 +1,19 @@
 import mongoose, { Document } from 'mongoose'
 
 export interface IReport extends Document {
+  _id: string
   title: string
   description: string
-  files: any[]
+  date: Date
+  imagesURL: string[]
   createdAt: Date
 }
 
 const ReportSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  date: Date,
   description: { type: String, required: true },
-  files: { type: [mongoose.Schema.Types.Mixed] },
+  imagesURL: { type: [String] },
   createdAt: { type: Date, default: Date.now },
 })
 
