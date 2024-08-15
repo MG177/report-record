@@ -4,11 +4,11 @@ import Report, { IReport } from '@/models/Report'
 import formidable from 'formidable'
 import fs from 'fs/promises'
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// }
 
 export async function POST(req: NextRequest) {
   await dbConnect()
