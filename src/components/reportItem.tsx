@@ -24,10 +24,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
       </div>
       <div className="mt-2">
         <span className="text-lg font-bold">Description: </span>
-        {report.description} Fugiat exercitation amet ea aute officia eu fugiat
-        ipsum non exercitation incididunt ipsum. Incididunt dolore adipisicing
-        qui cillum in reprehenderit ea dolor. Amet ex qui proident est sit
-        proident commodo in culpa duis culpa proident.
+        {report.description}
       </div>
     </div>
   )

@@ -17,9 +17,11 @@ export default function Home() {
     description: '',
     images: [],
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setIsSubmitting(true)
 
     const formDataToSend = new FormData()
     formDataToSend.append('title', formData.title)
@@ -38,11 +40,14 @@ export default function Home() {
       if (response.ok) {
         const data = await response.json()
         console.log('Report created:', data)
+        window.location.href = '/' // Navigate to home page
       } else {
         console.error('Failed to create report')
       }
     } catch (error) {
       console.error('Error submitting form:', error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -155,9 +160,10 @@ export default function Home() {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background/60 to-transparent h-24 flex items-end">
           <button
             type="submit"
-            className="bg-primary text-white py-2 px-4 rounded-xl w-full"
+            className="bg-primary text-white py-2 px-4 rounded-xl w-full disabled:opacity-50"
+            disabled={isSubmitting}
           >
-            Submit
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </form>
