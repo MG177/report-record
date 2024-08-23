@@ -25,9 +25,9 @@ export default function Home() {
     formDataToSend.append('title', formData.title)
     formDataToSend.append('date', formData.date.toISOString())
     formDataToSend.append('description', formData.description)
-    formData.images.forEach((image) => {
-      formDataToSend.append('images', image.file)
-    })
+    // formData.images.forEach((image) => {
+    //   formDataToSend.append('images', image.file)
+    // })
 
     try {
       const response = await fetch('/api/reports', {
@@ -121,7 +121,7 @@ export default function Home() {
             required
           />
         </div>
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <div className="text-2xl font-normal leading-none">Photos</div>
           <div className="h-fit w-fit flex flex-row items-center gap-2 flex-wrap">
             {formData.images.map((image, index) => (
@@ -151,7 +151,7 @@ export default function Home() {
               <span>+ Add Photo</span>
             </label>
           </div>
-        </div>
+        </div> */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background/60 to-transparent h-24 flex items-end">
           <button
             type="submit"

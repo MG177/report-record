@@ -1,29 +1,44 @@
-'use client'
 import { useState } from 'react'
 
 interface SearchProps {
   searchTerm: string
-  setSearchTerm: (term: string) => void
+  onSearch: (term: string) => void
+  sortField: string
+  sortOrder: string
+  onSort: (field: string) => void
+  onSortOrderChange: () => void
 }
 
-export default function Search({ searchTerm, setSearchTerm }: SearchProps) {
-  const handleSearch = () => {
-    // onSearch(searchTerm);
-  }
+export default function Search({
+  searchTerm,
+  onSearch,
+  sortField,
+  sortOrder,
+  onSort,
+  onSortOrderChange,
+}: SearchProps) {
   return (
-    <div className="w-full mt-6 flex flex-col sm:flex-row gap-4">
+    <div className="w-full my-3 flex flex-row gap-2">
       <input
         type="text"
         placeholder="Search..."
-        className="w-full bg-transparent px-4 py-2 2 rounded-lg border-2 border-primary text-text text-xl sm:text-2xl md:text-3xl placeholde:text-white/50"
+        className="w-full bg-transparent px-4 py-2 rounded-lg border-2 border-primary text-text text-xl sm:text-2xl md:text-3xl placeholde:text-white/50"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => onSearch(e.target.value)}
       />
-      <button
-        className="w-12 h-12 bg-white rounded-lg border-2 border-text flex items-center justify-center"
-        onClick={handleSearch}
+      <select
+        value={sortField}
+        onChange={(e) => onSort(e.target.value)}
+        className="p-2 min-w-[15%] rounded-lg border-2 border-primary"
       >
-        <span className="text-2xl">🔍</span>
+        <option value="createdAt">Date</option>
+        <option value="title">Title</option>
+      </select>
+      <button
+        onClick={onSortOrderChange}
+        className="p-2 rounded-lg border-2 border-primary"
+      >
+        {sortOrder === 'asc' ? '↑' : '↓'}
       </button>
     </div>
   )

@@ -19,21 +19,22 @@ export async function POST(req: NextRequest) {
     const title = formData.get('title') as string
     const date = new Date(formData.get('date') as string)
     const description = formData.get('description') as string
-    const images: File[] = formData.getAll('images') as unknown as File[]
+    // const images: File[] = formData.getAll('images') as unknown as File[]
 
     // Handle file uploads separately if needed
-    const imagesURL = await Promise.all(
-      images.map(async (image) => {
-        const data = await image.arrayBuffer()
-        const fileName = `${Date.now()}-${image.name}`
+    // const imagesURL = await Promise.all(
+    //   images.map(async (image) => {
+    //     const data = await image.arrayBuffer()
+    //     const fileName = `${Date.now()}-${image.name}`
 
-        await fs.writeFile(`./public/uploads/${fileName}`, Buffer.from(data))
-        return `/uploads/${fileName}`
-      })
-    )
+    //     await fs.writeFile(`./public/uploads/${fileName}`, Buffer.from(data))
+    //     return `/uploads/${fileName}`
+    //   })
+    // )
 
     // Create a new report instance
-    const report = new Report({ title, date, description, imagesURL })
+    // const report = new Report({ title, date, description, imagesURL })
+    const report = new Report({ title, date, description })
     await report.save()
 
     return NextResponse.json(report, { status: 201 })
@@ -49,7 +50,30 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   await dbConnect()
   try {
-    const reports: IReport[] = await Report.find({}).lean()
+    const searchParams = req.nextUrl.searchParams
+    const sortField = searchParams.get('sort') || 'date'
+    const sortOrder = searchParams.get('order') === 'asc' ? 1 : -1
+    const searchTerm = searchParams.get('search') || ''
+    const startDate = searchParams.get('startDate')
+    const endDate = searchParams.get('endDate')
+
+    let query: any = {}
+
+    if (searchTerm) {
+      query.title = { $regex: searchTerm, $options: 'i' }
+    }
+
+    if (startDate && endDate) {
+      query.date = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      }
+    }
+
+    const reports: IReport[] = await Report.find(query)
+      .sort({ [sortField]: sortOrder })
+      .lean()
+
     return NextResponse.json(reports, { status: 200 })
   } catch (error) {
     console.error('Error fetching reports:', error)
