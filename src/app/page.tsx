@@ -116,73 +116,138 @@ function HeaderReports() {
 
 function ExportButton() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [exportData, setExportData] = useState<IReport[]>([])
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
-  const handleExport = () => {
-    setIsModalOpen(true)
-  }
+  const handleExport = () => setIsModalOpen(true)
 
-  const fetchData = async (startDate: string, endDate: string) => {
+  const fetchData = async (startDate, endDate) => {
     const response = await fetch(
       `/api/reports?startDate=${startDate}&endDate=${endDate}&sort=date&order=desc`
     )
-    const data = await response.json()
-    return data
+    return response.json()
   }
 
-  const exportDataForRange = async (range: string) => {
-    const endDate = new Date().toISOString().split('T')[0]
-    let startDate: string
-
-    switch (range) {
-      case 'today':
-        startDate = endDate
-        break
-      case 'week':
-        startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split('T')[0]
-        break
-      case 'month':
-        startDate = new Date(new Date().setMonth(new Date().getMonth() - 1))
-          .toISOString()
-          .split('T')[0]
-        break
-      default:
-        return
-    }
-
+  const exportDataForRange = async () => {
     const data = await fetchData(startDate, endDate)
-    const formattedData = data.map((item: IReport) => ({
-      title: item.title,
-      description: item.description,
-      date: convertDate(item.date).date,
-      time: convertDate(item.date).time,
+    const formattedData = data.map(({ title, description, date }) => ({
+      title,
+      description,
+      date: convertDate(date).date,
+      time: convertDate(date).time,
     }))
 
     exportObjectToXLS(formattedData)
     setIsModalOpen(false)
   }
 
+  const setDateRange = (rangeType) => {
+    const today = new Date()
+    let start, end
+
+    switch (rangeType) {
+      case 'today':
+        start = end = today.toISOString().split('T')[0]
+        break
+      case 'week':
+        const lastWeek = new Date(today.setDate(today.getDate() - 7))
+        start = lastWeek.toISOString().split('T')[0]
+        end = new Date().toISOString().split('T')[0]
+        break
+      case 'month':
+        const lastMonth = new Date(today.setMonth(today.getMonth() - 1))
+        start = lastMonth.toISOString().split('T')[0]
+        end = new Date().toISOString().split('T')[0]
+        break
+      case 'year':
+        const lastYear = new Date(today.setFullYear(today.getFullYear() - 1))
+        start = lastYear.toISOString().split('T')[0]
+        end = new Date().toISOString().split('T')[0]
+        break
+      default:
+        return
+    }
+
+    setStartDate(start)
+    setEndDate(end)
+  }
+
+  useEffect(() => {
+    console.log(startDate, endDate)
+  }, [startDate, endDate])
+
   return (
     <>
       <Button text="Export" onClick={handleExport} />
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="flex flex-col gap-2">
-          <Button text="Today" onClick={() => exportDataForRange('today')} />
-          <Button text="This Week" onClick={() => exportDataForRange('week')} />
-          <Button
-            text="This Month"
-            onClick={() => exportDataForRange('month')}
-          />
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <DateInput
+              label="Start Date"
+              id="start-date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <DateInput
+              label="End Date"
+              id="end-date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Button
+              className="bg-slate-50 text-text text-center border border-text text-md px-1 py-1"
+              text="Today"
+              onClick={() => setDateRange('today')}
+            />
+            <Button
+              className="bg-slate-50 text-text text-center border border-text text-md px-1 py-1"
+              text="This Week"
+              onClick={() => setDateRange('week')}
+            />
+            <Button
+              className="bg-slate-50 text-text text-center border border-text text-md px-1 py-1"
+              text="This Month"
+              onClick={() => setDateRange('month')}
+            />
+            <Button
+              className="bg-slate-50 text-text text-center border border-text text-md px-1 py-1"
+              text="This Year"
+              onClick={() => setDateRange('year')}
+            />
+          </div>
+          <div className="flex flex-row justify-end gap-4 mt-2">
+            <button className="text-end" onClick={() => setIsModalOpen(false)}>
+              Cancel
+            </button>
+            <Button
+              text="Export"
+              onClick={exportDataForRange}
+              disabled={!startDate || !endDate}
+              className="w-fit truncate "
+            />
+          </div>
         </div>
-        <button
-          className="w-full text-end mt-6"
-          onClick={() => setIsModalOpen(false)}
-        >
-          Cancel
-        </button>
       </Modal>
     </>
+  )
+}
+
+function DateInput({ label, id, value, onChange }) {
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={id} className="mb-1 text-sm font-medium text-gray-700">
+        {label}
+      </label>
+      <input
+        type="date"
+        id={id}
+        value={value}
+        onChange={onChange}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+      />
+    </div>
   )
 }

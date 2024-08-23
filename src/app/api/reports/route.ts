@@ -70,6 +70,8 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    console.log(query)
+
     const reports: IReport[] = await Report.find(query)
       .sort({ [sortField]: sortOrder })
       .lean()

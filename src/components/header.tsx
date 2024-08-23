@@ -27,7 +27,7 @@ export function HeaderNewReports() {
     <div className="w-full space-y-4 sm:space-y-6 py-4">
       <div className="flex flex-row justify-between items-center gap-4">
         {/* navigate to back to reports page */}
-        <Button text="<-" link="/" />
+        <Button text="Back" link="/" />
         <h1 className="text-text text-3xl sm:text-5xl md:text-6xl font-bold ">
           New Reports
         </h1>
