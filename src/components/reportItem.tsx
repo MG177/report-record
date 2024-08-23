@@ -16,7 +16,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
           <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
           <span className="text-black text-xl sm:text-2xl md:text-3xl">
             {report.title}
-            <div className="text-black text-sm sm:text-md md:text-lg font-light text-center justify-center">
+            <div className="text-black text-sm sm:text-md md:text-lg font-light text-start justify-center">
               {reportDate.time} | {reportDate.date}
             </div>
           </span>
