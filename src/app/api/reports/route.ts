@@ -13,28 +13,14 @@ import fs from 'fs/promises'
 export async function POST(req: NextRequest) {
   await dbConnect()
   try {
-    const formData = await req.formData()
+    const body = await req.json()
 
-    // Extract data from formData
-    const title = formData.get('title') as string
-    const date = new Date(formData.get('date') as string)
-    const description = formData.get('description') as string
-    // const images: File[] = formData.getAll('images') as unknown as File[]
+    // Extract data from JSON body
 
-    // Handle file uploads separately if needed
-    // const imagesURL = await Promise.all(
-    //   images.map(async (image) => {
-    //     const data = await image.arrayBuffer()
-    //     const fileName = `${Date.now()}-${image.name}`
-
-    //     await fs.writeFile(`./public/uploads/${fileName}`, Buffer.from(data))
-    //     return `/uploads/${fileName}`
-    //   })
-    // )
-
-    // Create a new report instance
-    // const report = new Report({ title, date, description, imagesURL })
-    const report = new Report({ title, date, description })
+    const report = new Report({
+      ...body,
+      date: new Date(body.date),
+    })
     await report.save()
 
     return NextResponse.json(report, { status: 201 })
@@ -69,8 +55,6 @@ export async function GET(req: NextRequest) {
         $lte: new Date(endDate),
       }
     }
-
-    console.log(query)
 
     const reports: IReport[] = await Report.find(query)
       .sort({ [sortField]: sortOrder })

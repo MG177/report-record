@@ -2,20 +2,26 @@
 
 import { useEffect, useState } from 'react'
 import { HeaderNewReports } from '../../components/header'
+import moment from 'moment';
 
-interface FormData {
+// Renamed `FormData` to `ReportFormData` to avoid clashing with built-in FormData
+type ReportFormData = {
   title: string
   date: Date
   description: string
-  images: { url: string; file: File }[]
+  location: string
+  problem: string
+  solve: string
 }
 
 export default function Home() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ReportFormData>({
     title: '',
     date: new Date(),
     description: '',
-    images: [],
+    location: '',
+    problem: '',
+    solve: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -23,18 +29,22 @@ export default function Home() {
     event.preventDefault()
     setIsSubmitting(true)
 
-    const formDataToSend = new FormData()
-    formDataToSend.append('title', formData.title)
-    formDataToSend.append('date', formData.date.toISOString())
-    formDataToSend.append('description', formData.description)
-    // formData.images.forEach((image) => {
-    //   formDataToSend.append('images', image.file)
-    // })
+    const jsonData = {
+      title: formData.title || '',
+      date: formData.date?.toISOString() || '',
+      description: formData.description || '',
+      location: formData.location || '',
+      problem: formData.problem || '',
+      solve: formData.solve || '',
+    }
 
     try {
       const response = await fetch('/api/reports', {
         method: 'POST',
-        body: formDataToSend,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonData),
       })
 
       if (response.ok) {
@@ -49,29 +59,6 @@ export default function Home() {
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (files) {
-      const newImages = Array.from(files).map((file) => ({
-        url: URL.createObjectURL(file),
-        file: file,
-      }))
-      setFormData((prevData) => ({
-        ...prevData,
-        images: [...prevData.images, ...newImages],
-      }))
-    }
-  }
-
-  const removeImage = (index: number) => {
-    setFormData((prevData) => {
-      const newImages = [...prevData.images]
-      URL.revokeObjectURL(newImages[index].url)
-      newImages.splice(index, 1)
-      return { ...prevData, images: newImages }
-    })
   }
 
   useEffect(() => {
@@ -90,7 +77,7 @@ export default function Home() {
           <input
             type="text"
             className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary"
-            value={formData.title}
+            value={formData.title || ''}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
@@ -98,11 +85,11 @@ export default function Home() {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <div className="text-2xl font-normal leading-none">Date</div>
+          <div className="text-2xl font-normal leading-none">Date & Time</div>
           <input
-            type="date"
+            type="datetime-local"
             className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary bg-background"
-            value={formData.date.toISOString().split('T')[0]}
+            value={formData.date?.toISOString().split('.')[0] || ''}
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -113,10 +100,50 @@ export default function Home() {
           />
         </div>
         <div className="flex flex-col gap-2">
+          <div className="text-2xl font-normal leading-none">Location</div>
+          <input
+            type="text"
+            className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary"
+            value={formData.location || ''}
+            onChange={(e) =>
+              setFormData({ ...formData, location: e.target.value })
+            }
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="text-2xl font-normal leading-none">Problem</div>
+          <textarea
+            className="w-full h-40 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary resize-none colors-text"
+            value={formData.problem || ''}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                problem: e.target.value,
+              })
+            }
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="text-2xl font-normal leading-none">Solution</div>
+          <textarea
+            className="w-full h-40 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary resize-none colors-text"
+            value={formData.solve || ''}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                solve: e.target.value,
+              })
+            }
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-2">
           <div className="text-2xl font-normal leading-none">Description</div>
           <textarea
             className="w-full h-40 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary resize-none colors-text"
-            value={formData.description}
+            value={formData.description || ''}
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -126,37 +153,6 @@ export default function Home() {
             required
           />
         </div>
-        {/* <div className="flex flex-col gap-2">
-          <div className="text-2xl font-normal leading-none">Photos</div>
-          <div className="h-fit w-fit flex flex-row items-center gap-2 flex-wrap">
-            {formData.images.map((image, index) => (
-              <div key={index} className="relative">
-                <img
-                  className="w-44 h-44 rounded-xl border-2 border-secondary flex flex-col justify-center items-center object-cover"
-                  src={image.url}
-                  alt={`Uploaded image ${index + 1}`}
-                />
-                <button
-                  type="button"
-                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
-                  onClick={() => removeImage(index)}
-                >
-                  X
-                </button>
-              </div>
-            ))}
-            <label className="w-44 h-44 rounded-xl border-2 border-secondary flex flex-col justify-center items-center cursor-pointer">
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-              <span>+ Add Photo</span>
-            </label>
-          </div>
-        </div> */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background/60 to-transparent h-24 flex items-end">
           <button
             type="submit"

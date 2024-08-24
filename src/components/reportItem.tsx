@@ -22,10 +22,18 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
           </span>
         </div>
       </div>
-      <div className="mt-2">
+      <p className="mt-2 line-clamp-3">
+        <span className="text-lg font-bold">Problem: </span>
+        {report.problem}
+      </p>
+      <p className="mt-2 line-clamp-3">
+        <span className="text-lg font-bold">Solve: </span>
+        {report.solve}
+      </p>
+      <p className="mt-2 line-clamp-3">
         <span className="text-lg font-bold">Description: </span>
         {report.description}
-      </div>
+      </p>
     </div>
   )
 }

@@ -1,19 +1,23 @@
 import mongoose, { Document } from 'mongoose'
 
 export interface IReport extends Document {
-  _id: string
+  readonly _id: string
   title: string
   description: string
   date: Date
-  imagesURL: string[]
-  createdAt: Date
+  location: string
+  problem: String
+  solve: String
+  readonly createdAt: Date
 }
 
 const ReportSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  date: Date,
-  description: { type: String, required: true },
-  imagesURL: { type: [String] },
+  description: { type: String, default: '-' },
+  date: { type: Date },
+  location: { type: String, default: '-' },
+  problem: { type: String, default: '-' },
+  solve: { type: String, default: '-' },
   createdAt: { type: Date, default: Date.now },
 })
 
