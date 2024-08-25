@@ -179,7 +179,7 @@ function ExportButton() {
   return (
     <>
       <Button text="Export" onClick={handleExport} />
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} header="Export Reports">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col md:flex-row gap-4">
             <DateInput
