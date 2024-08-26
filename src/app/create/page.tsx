@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { HeaderNewReports } from '../../components/header'
-import moment from 'moment';
+import moment from 'moment'
 
 // Renamed `FormData` to `ReportFormData` to avoid clashing with built-in FormData
 type ReportFormData = {
@@ -72,7 +72,7 @@ export default function Home() {
         onSubmit={handleSubmit}
         className="w-full h-fit mt-2 flex flex-col gap-4 mb-20"
       >
-        <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-col gap-2">
           <div className="text-2xl font-normal leading-none">Title</div>
           <input
             type="text"
@@ -80,6 +80,18 @@ export default function Home() {
             value={formData.title || ''}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
+            }
+            required
+          />
+        </div> */}
+        <div className="flex flex-col gap-2">
+          <div className="text-2xl font-normal leading-none">Location</div>
+          <input
+            type="text"
+            className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary"
+            value={formData.location || ''}
+            onChange={(e) =>
+              setFormData({ ...formData, location: e.target.value })
             }
             required
           />
@@ -95,18 +107,6 @@ export default function Home() {
                 ...formData,
                 date: new Date(e.target.value),
               })
-            }
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <div className="text-2xl font-normal leading-none">Location</div>
-          <input
-            type="text"
-            className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary"
-            value={formData.location || ''}
-            onChange={(e) =>
-              setFormData({ ...formData, location: e.target.value })
             }
             required
           />

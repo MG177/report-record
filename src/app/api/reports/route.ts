@@ -70,43 +70,4 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
-  await dbConnect()
-  try {
-    const { id, ...updateData } = await req.json()
-    const updatedReport = await Report.findByIdAndUpdate(id, updateData, {
-      new: true,
-    })
-    if (!updatedReport) {
-      return NextResponse.json({ error: 'Report not found' }, { status: 404 })
-    }
-    return NextResponse.json(updatedReport, { status: 200 })
-  } catch (error) {
-    console.error('Error updating report:', error)
-    return NextResponse.json(
-      { error: 'Error updating report' },
-      { status: 500 }
-    )
-  }
-}
 
-export async function DELETE(req: NextRequest) {
-  await dbConnect()
-  try {
-    const { id } = await req.json()
-    const deletedReport = await Report.findByIdAndDelete(id)
-    if (!deletedReport) {
-      return NextResponse.json({ error: 'Report not found' }, { status: 404 })
-    }
-    return NextResponse.json(
-      { message: 'Report deleted successfully' },
-      { status: 200 }
-    )
-  } catch (error) {
-    console.error('Error deleting report:', error)
-    return NextResponse.json(
-      { error: 'Error deleting report' },
-      { status: 500 }
-    )
-  }
-}

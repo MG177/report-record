@@ -13,11 +13,11 @@ export interface IReport extends Document {
 
 const ReportSchema = new mongoose.Schema({
   // title: { type: String, required: true },
-  description: { type: String, default: '-' },
+  description: { type: String, default: '' },
   date: { type: Date },
-  location: { type: String, default: '-', required: true },
-  problem: { type: String, default: '-' },
-  solve: { type: String, default: '-' },
+  location: { type: String, default: '', required: true },
+  problem: { type: String, default: '' },
+  solve: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now },
 })
 

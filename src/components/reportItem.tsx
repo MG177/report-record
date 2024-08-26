@@ -14,8 +14,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`/api/reports/`, {
-        body: JSON.stringify({ id: report._id }),
+      const response = await fetch(`/api/reports/${report._id}`, {
         method: 'DELETE',
       })
       if (response.ok) {
@@ -26,6 +25,10 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
     } catch (error) {
       console.error('Error deleting report:', error)
     }
+  }
+
+  const handleEdit = () => {
+    window.location.href = `/edit/${report._id}`
   }
 
   const openDeleteModal = () => setIsModalOpen(true)
@@ -55,12 +58,20 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
         <span className="text-lg font-bold">Description: </span>
         {report.description}
       </p>
-      <button
-        className="w-20 h-8 px-0 py-0 text-center text-white rounded-lg justify-center bg-red-400 absolute right-5"
-        onClick={openDeleteModal}
-      >
-        Delete
-      </button>
+      <div className="absolute right-5 space-x-2">
+        <button
+          className="w-16 h-8 px-0 py-0 text-center text-white rounded-lg justify-center bg-blue-400 "
+          onClick={handleEdit}
+        >
+          Edit
+        </button>
+        <button
+          className="w-16 h-8 px-0 py-0 text-center text-white rounded-lg justify-center bg-red-400"
+          onClick={openDeleteModal}
+        >
+          Delete
+        </button>
+      </div>
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

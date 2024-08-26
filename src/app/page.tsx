@@ -10,6 +10,7 @@ import Button from '@/components/button'
 import { exportObjectToXLS } from '@/utils/exportXLS'
 import convertDate from '@/utils/convertDate'
 import Modal from '@/components/modal'
+import Loading from '@/components/loading'
 
 export default function Home() {
   const [reports, setReports] = useState<IReport[]>([])
@@ -83,7 +84,8 @@ export default function Home() {
         onSortOrderChange={handleSortOrderChange}
       />
       {isLoading ? (
-        <div className="w-full text-center py-4">Loading...</div>
+        // <div className="w-full text-center py-4">Loading...</div>
+        <Loading />
       ) : (
         <div className="w-full flex flex-col gap-4">
           {reports.map((report) => (
@@ -106,7 +108,7 @@ function HeaderReports() {
         </div>
         <div className="flex flex-row gap-4">
           <ExportButton />
-          <Button text="+ Add Report" link="/newReport" />
+          <Button text="+ Add Report" link="/create" />
         </div>
       </div>
       <div className="h-1 bg-[#5e5e5e] rounded-full"></div>
@@ -179,7 +181,11 @@ function ExportButton() {
   return (
     <>
       <Button text="Export" onClick={handleExport} />
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} header="Export Reports">
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        header="Export Reports"
+      >
         <div className="flex flex-col gap-4">
           <div className="flex flex-col md:flex-row gap-4">
             <DateInput
