@@ -133,10 +133,9 @@ function ExportButton() {
   const exportDataForRange = async () => {
     const data = await fetchData(startDate, endDate)
     const formattedData = data.map(({ date, location, problem }) => ({
-      location,
-      problem,
-      time: convertDate(date).time,
       date: convertDate(date).date,
+      location,
+      problem
     }))
 
     exportObjectToXLS(formattedData)
