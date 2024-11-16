@@ -1,28 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { dbConnect } from '@/utils/dbConnect'
 import Report, { IReport } from '@/models/Report'
-import formidable from 'formidable'
-import fs from 'fs/promises'
-
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// }
 
 export async function POST(req: NextRequest) {
   await dbConnect()
   try {
     const body = await req.json()
-
-    // Extract data from JSON body
-
-    const report = new Report({
-      ...body,
-      date: new Date(body.date),
-    })
+    const report = new Report(body)
     await report.save()
-
     return NextResponse.json(report, { status: 201 })
   } catch (error) {
     console.error('Error creating report:', error)
@@ -45,20 +30,34 @@ export async function GET(req: NextRequest) {
 
     let query: any = {}
 
+    // Handle search term
     if (searchTerm) {
-      query.title = { $regex: searchTerm, $options: 'i' }
+      query.$or = [
+        { location: { $regex: searchTerm, $options: 'i' } },
+        { problem: { $regex: searchTerm, $options: 'i' } },
+        { description: { $regex: searchTerm, $options: 'i' } }
+      ]
     }
 
-    if (startDate && endDate) {
-      query.date = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate),
+    // Handle date range
+    if (startDate || endDate) {
+      query.date = {}
+      if (startDate) {
+        query.date.$gte = new Date(startDate)
+      }
+      if (endDate) {
+        query.date.$lte = new Date(endDate)
       }
     }
+
+    console.log('Query:', JSON.stringify(query, null, 2))
+    console.log('Date Range:', { startDate, endDate })
 
     const reports: IReport[] = await Report.find(query)
       .sort({ [sortField]: sortOrder })
       .lean()
+
+    console.log('Found reports:', reports.length)
 
     return NextResponse.json(reports, { status: 200 })
   } catch (error) {
@@ -69,5 +68,3 @@ export async function GET(req: NextRequest) {
     )
   }
 }
-
-

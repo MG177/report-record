@@ -1,6 +1,8 @@
 'use client'
 
-import Search from '@/components/search'
+import { Suspense } from 'react'
+import dynamic from 'next/dynamic'
+import Loading from '@/components/loading'
 import ReportItem from '@/components/reportItem'
 import { IReport } from '@/models/Report'
 import useFetch from '@/hooks/useFetch'
@@ -10,7 +12,16 @@ import Button from '@/components/button'
 import { exportObjectToXLS } from '@/utils/exportXLS'
 import convertDate from '@/utils/convertDate'
 import Modal from '@/components/modal'
-import Loading from '@/components/loading'
+import HeaderDefault from '@/components/header'
+
+// Dynamically import components that are not immediately needed
+const Search = dynamic(() => import('@/components/search'), {
+  loading: () => <Loading />
+})
+
+const ReportsList = dynamic(() => import('@/components/reportsList'), {
+  loading: () => <Loading />
+})
 
 export default function Home() {
   const [reports, setReports] = useState<IReport[]>([])
@@ -73,46 +84,26 @@ export default function Home() {
   const isLoading = loading || isSearching || isSorting
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 sm:p-6 md:p-9  w-full max-w-7xl mx-auto font-['Calibri']">
-      <HeaderReports />
-      <Search
-        searchTerm={searchTerm}
-        onSearch={handleSearch}
-        sortField={sortField}
-        sortOrder={sortOrder}
-        onSort={handleSort}
-        onSortOrderChange={handleSortOrderChange}
-      />
+    <main className="flex min-h-screen flex-col items-center p-4 sm:p-6 md:p-9 w-full max-w-7xl mx-auto font-['Calibri']">
+      <HeaderDefault title="Reports" />
+      <Suspense fallback={<Loading />}>
+        <Search
+          searchTerm={searchTerm}
+          onSearch={handleSearch}
+          sortField={sortField}
+          sortOrder={sortOrder}
+          onSort={handleSort}
+          onSortOrderChange={handleSortOrderChange}
+        />
+      </Suspense>
       {isLoading ? (
-        // <div className="w-full text-center py-4">Loading...</div>
         <Loading />
       ) : (
-        <div className="w-full flex flex-col gap-4">
-          {reports.map((report) => (
-            <ReportItem key={report._id} report={report} />
-          ))}
-        </div>
+        <Suspense fallback={<Loading />}>
+          <ReportsList reports={reports} />
+        </Suspense>
       )}
     </main>
-  )
-}
-
-function HeaderReports() {
-  return (
-    <div className="w-full space-y-4 sm:space-y-6 py-4">
-      <div className="flex flex-row justify-between items-center gap-4">
-        <div>
-          <h1 className="text-text text-3xl sm:text-5xl md:text-6xl font-bold ">
-            Reports
-          </h1>
-        </div>
-        <div className="flex flex-row gap-4">
-          <ExportButton />
-          <Button text="+ Add Report" link="/create" />
-        </div>
-      </div>
-      <div className="h-1 bg-[#5e5e5e] rounded-full"></div>
-    </div>
   )
 }
 

@@ -1,41 +1,51 @@
 'use client'
 import Link from 'next/link'
-import { MouseEvent } from 'react'
 
 interface ButtonProps {
   text: string
-  className?: string
   link?: string
-  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
+  onClick?: () => void
+  variant?: 'primary' | 'secondary' | 'danger'
   disabled?: boolean
+  type?: 'button' | 'submit'
+  className?: string
 }
 
 export default function Button({
   text,
-  className,
   link,
   onClick,
+  variant = 'primary',
   disabled = false,
+  type = 'button',
+  className = '',
 }: ButtonProps) {
-  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (onClick && !disabled) {
-      event.preventDefault()
-      onClick(event)
-    }
+  const baseStyles = 'px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md'
+  
+  const variantStyles = {
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white',
+    secondary: 'bg-white border border-blue-200 text-blue-700 hover:bg-blue-50',
+    danger: 'bg-red-600 hover:bg-red-700 text-white',
   }
 
-  const baseClasses = `px-6 py-2 bg-secondary rounded-xl text-background text-md sm:text-lg md:text-xl font-bold max-h-[80px] truncate`
-  const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : ''
+  const styles = `${baseStyles} ${variantStyles[variant]} ${className}`
+
+  if (link) {
+    return (
+      <Link href={link} className={styles}>
+        {text}
+      </Link>
+    )
+  }
 
   return (
-    <Link
-      className={`${baseClasses} ${disabledClasses} ${className}`}
-      href={disabled ? '#' : link || '#'}
-      onClick={handleClick}
-      aria-disabled={disabled}
-      tabIndex={disabled ? -1 : undefined}
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
+      className={styles}
     >
       {text}
-    </Link>
+    </button>
   )
 }

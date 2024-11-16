@@ -18,28 +18,56 @@ export default function Search({
   onSortOrderChange,
 }: SearchProps) {
   return (
-    <div className="w-full my-3 flex flex-row gap-2">
-      <input
-        type="text"
-        placeholder="Search..."
-        className="w-full bg-transparent px-4 py-2 rounded-lg border-2 border-primary text-text text-xl sm:text-2xl md:text-3xl placeholde:text-white/50"
-        value={searchTerm}
-        onChange={(e) => onSearch(e.target.value)}
-      />
-      <select
-        value={sortField}
-        onChange={(e) => onSort(e.target.value)}
-        className="p-2 min-w-[15%] rounded-lg border-2 border-primary"
-      >
-        <option value="createdAt">Date</option>
-        <option value="title">Title</option>
-      </select>
-      <button
-        onClick={onSortOrderChange}
-        className="p-2 rounded-lg border-2 border-primary"
-      >
-        {sortOrder === 'asc' ? '↑' : '↓'}
-      </button>
+    <div className="w-full mb-6">
+      <div className="bg-white p-4 rounded-2xl shadow-lg border border-blue-100 space-y-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search reports..."
+            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-lg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            value={searchTerm}
+            onChange={(e) => onSearch(e.target.value)}
+          />
+          <svg 
+            className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 20 20" 
+            fill="currentColor"
+          >
+            <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
+          </svg>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-gray-600 text-sm">
+            <span>Sort by:</span>
+            <select
+              value={sortField}
+              onChange={(e) => onSort(e.target.value)}
+              className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
+            >
+              <option value="createdAt">Date</option>
+              <option value="location">Location</option>
+            </select>
+          </div>
+
+          <button
+            onClick={onSortOrderChange}
+            className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          >
+            <span className="text-sm">Order</span>
+            {sortOrder === 'asc' ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

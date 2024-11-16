@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Homepage',
-  description: 'Reports List',
+  title: 'Report Record',
+  description: 'Record your reports',
 }
 
 export default function RootLayout({
@@ -17,9 +18,46 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`container mx-auto bg-background bg-none px-4 overflow-x-hidden w-screen font-['Calibri'] text-text ${inter.className}`}
+        className={`min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 text-gray-900 ${inter.className}`}
       >
-        {children}
+        <div className="min-h-screen backdrop-blur-3xl">
+          <div className="container mx-auto px-4 py-8">
+            {children}
+          </div>
+        </div>
+        <Toaster 
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#1d4ed8',
+              color: '#fff',
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            },
+            success: {
+              duration: 2000,
+              iconTheme: {
+                primary: '#4ade80',
+                secondary: '#fff',
+              },
+              style: {
+                background: '#1e40af',
+                color: '#fff',
+              },
+            },
+            error: {
+              duration: 4000,
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+              style: {
+                background: '#991b1b',
+                color: '#fff',
+              },
+            },
+          }}
+        />
       </body>
     </html>
   )
