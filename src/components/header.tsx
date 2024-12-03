@@ -10,7 +10,7 @@ interface HeadingProps {
 export default function HeaderDefault({ title, description }: HeadingProps) {
   return (
     <div className="w-full mb-8">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
+      <div className="flex flex-row justify-between items-center gap-4 bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-md">
             {title[0]}
@@ -27,7 +27,12 @@ export default function HeaderDefault({ title, description }: HeadingProps) {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button text="+ Add Report" link="/create" variant="primary" />
+          <Button 
+            text="" 
+            link="/create" 
+            variant="primary" 
+            icon="pi-plus"
+          />
           <ExportButton />
         </div>
       </div>

@@ -3,6 +3,8 @@ import Link from 'next/link'
 
 interface ButtonProps {
   text: string
+  icon?: string
+  iconPos?: 'left' | 'right'
   link?: string
   onClick?: () => void
   variant?: 'primary' | 'secondary' | 'danger'
@@ -13,6 +15,8 @@ interface ButtonProps {
 
 export default function Button({
   text,
+  icon,
+  iconPos = 'left',
   link,
   onClick,
   variant = 'primary',
@@ -20,7 +24,8 @@ export default function Button({
   type = 'button',
   className = '',
 }: ButtonProps) {
-  const baseStyles = 'px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md'
+  // Base styles with conditional padding based on whether there's text
+  const baseStyles = `${text ? 'px-5' : 'px-4'} py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md min-w-[2.5rem]`
   
   const variantStyles = {
     primary: 'bg-blue-600 hover:bg-blue-700 text-white',
@@ -30,10 +35,18 @@ export default function Button({
 
   const styles = `${baseStyles} ${variantStyles[variant]} ${className}`
 
+  const content = (
+    <>
+      {icon && iconPos === 'left' && <i className={`pi ${icon} ${!text ? 'text-lg' : ''}`} />}
+      {text}
+      {icon && iconPos === 'right' && <i className={`pi ${icon} ${!text ? 'text-lg' : ''}`} />}
+    </>
+  )
+
   if (link) {
     return (
       <Link href={link} className={styles}>
-        {text}
+        {content}
       </Link>
     )
   }
@@ -45,7 +58,7 @@ export default function Button({
       type={type}
       className={styles}
     >
-      {text}
+      {content}
     </button>
   )
 }

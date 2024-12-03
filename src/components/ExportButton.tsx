@@ -126,7 +126,12 @@ export default function ExportButton() {
 
   return (
     <>
-      <Button text="Export" onClick={handleExport} variant="secondary" />
+      <Button 
+        text="" 
+        onClick={handleExport} 
+        variant="secondary" 
+        icon="pi-file-export"
+      />
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -153,21 +158,25 @@ export default function ExportButton() {
               text="Today"
               onClick={() => setDateRange('today')}
               variant="secondary"
+              icon="pi-calendar"
             />
             <Button
               text="This Week"
               onClick={() => setDateRange('week')}
               variant="secondary"
+              icon="pi-calendar-plus"
             />
             <Button
               text="This Month"
               onClick={() => setDateRange('month')}
               variant="secondary"
+              icon="pi-calendar-times"
             />
             <Button
               text="This Year"
               onClick={() => setDateRange('year')}
               variant="secondary"
+              icon="pi-calendar-minus"
             />
           </div>
 
@@ -176,12 +185,14 @@ export default function ExportButton() {
               text="Cancel"
               onClick={() => setIsModalOpen(false)}
               variant="secondary"
+              icon="pi-times"
             />
             <Button
               text={isExporting ? 'Exporting...' : 'Export'}
               onClick={exportDataForRange}
               disabled={!startDate || !endDate || isExporting}
               variant="primary"
+              icon={isExporting ? "pi-spinner pi-spin" : "pi-download"}
             />
           </div>
         </div>

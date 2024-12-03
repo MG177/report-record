@@ -56,7 +56,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden transition-all duration-200 hover:shadow-xl">
       <div className="p-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             {report.images?.length > 0 ? (
               <div 
@@ -87,20 +87,22 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
           </div>
           <div className="flex gap-2 self-end sm:self-auto">
             <Button
-              text="Edit"
+              text=""
               onClick={handleEdit}
               variant="secondary"
+              icon="pi-pencil"
             />
             <Button
-              text="Delete"
+              text=""
               onClick={openDeleteModal}
               variant="danger"
+              icon="pi-trash"
             />
           </div>
         </div>
 
         {report.images?.length > 0 && (
-          <div className="mt-6 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+          <div className="mt-6 grid grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
             {report.images.map((image, index) => (
               <div
                 key={index}
