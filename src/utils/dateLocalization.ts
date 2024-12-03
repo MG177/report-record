@@ -11,9 +11,9 @@ const locales: Record<LocaleType, Locale> = {
 }
 
 const dateFormats: Record<DateFormat, string> = {
-  full: 'dd MMMM yyyy HH:mm zzz', // Added time zone
-  short: 'MM/dd/yyyy',
-  time: 'HH:mm zzz', // Added time zone
+  full: 'MMMM dd, yyyy hh:mm aa zzz', // US format with 12-hour time
+  short: 'MM/dd/yyyy',                 // US format MM/DD/YYYY
+  time: 'hh:mm aa zzz',               // 12-hour time with AM/PM
   relative: '',
   distance: ''
 }
@@ -40,17 +40,13 @@ interface DateOptions {
  * 
  * @example
  * // Using browser's time zone
- * formatDate(new Date())
+ * formatDate(new Date())  // "August 14, 2024 11:22 AM EDT"
  * 
  * // Using specific time zone
- * formatDate(new Date(), { timeZone: 'Asia/Tokyo' })
+ * formatDate(new Date(), { timeZone: 'America/New_York' })
  * 
- * // Full format with specific locale and time zone
- * formatDate(new Date(), { 
- *   formatType: 'full',
- *   locale: 'en',
- *   timeZone: 'America/New_York'
- * })
+ * // Short format
+ * formatDate(new Date(), { formatType: 'short' })  // "08/14/2024"
  */
 export function formatDate(
   date: Date | string | number,
@@ -58,7 +54,7 @@ export function formatDate(
 ): string {
   const {
     formatType = 'full',
-    locale = 'id',
+    locale = 'en', // Default to English locale
     timeZone = getUserTimeZone()
   } = options
 
@@ -91,16 +87,13 @@ export function formatDate(
  * 
  * @example
  * // Using browser's time zone
- * formatDateTime(new Date())
- * 
- * // Using specific time zone
- * formatDateTime(new Date(), { timeZone: 'Europe/London' })
+ * formatDateTime(new Date())  // { date: "08/14/2024", time: "11:22 AM EDT" }
  */
 export function formatDateTime(
   date: Date | string | number,
   options: Omit<DateOptions, 'formatType'> = {}
 ): { date: string; time: string } {
-  const { locale = 'id', timeZone = getUserTimeZone() } = options
+  const { locale = 'en', timeZone = getUserTimeZone() } = options
 
   return {
     date: formatDate(date, { formatType: 'short', locale, timeZone }),
