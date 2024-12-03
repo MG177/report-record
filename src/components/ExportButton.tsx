@@ -75,7 +75,7 @@ export default function ExportButton() {
       const baseUrl = window.location.origin
       const formattedData = data.map(({ _id, date, location, problem, solve, description }) => ({
         Date: convertDate(date).date,
-        Time: convertDate(date).time,
+        // Time: convertDate(date).time,
         Location: location,
         Problem: problem || '',
         Solution: solve || '',
