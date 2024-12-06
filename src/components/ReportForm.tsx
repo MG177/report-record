@@ -5,6 +5,8 @@ import { ReportFormData } from '@/models/Report'
 import { compressImage, formatFileSize, CompressionResult } from '@/utils/imageCompression'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
+import { formatDate } from '@/utils/dateLocalization'
+import { startOfDay } from 'date-fns'
 
 interface ImagePreview extends CompressionResult {
   id: string;
@@ -21,7 +23,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
   const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([])
   const [formData, setFormData] = useState<ReportFormData>({
     title: '',
-    date: new Date(),
+    date: startOfDay(new Date()),
     description: '',
     location: '',
     problem: '',
