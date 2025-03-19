@@ -1,4 +1,4 @@
-import { IReport } from '@/models/Report'
+import { IReport, ReportDocument } from '@/models/Report'
 import convertDate from '@/utils/convertDate'
 import React, { useState } from 'react'
 import Button from './button'
@@ -6,7 +6,7 @@ import Modal from './modal'
 import Image from 'next/image'
 
 interface ReportItemProps {
-  report: IReport
+  report: ReportDocument
 }
 
 const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
@@ -42,13 +42,13 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
   }
 
   const nextImage = () => {
-    setSelectedImageIndex((prev) => 
+    setSelectedImageIndex((prev) =>
       prev === report.images.length - 1 ? 0 : prev + 1
     )
   }
 
   const previousImage = () => {
-    setSelectedImageIndex((prev) => 
+    setSelectedImageIndex((prev) =>
       prev === 0 ? report.images.length - 1 : prev - 1
     )
   }
@@ -59,7 +59,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
         <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             {report.images?.length > 0 ? (
-              <div 
+              <div
                 className="w-14 h-14 rounded-xl overflow-hidden cursor-pointer shadow-md hover:shadow-lg transition-shadow"
                 onClick={() => handleImageClick(0)}
               >
@@ -122,15 +122,15 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
 
         <div className="mt-6 space-y-4">
           <div>
-            <h3 className="text-gray-900 font-semibold mb-2">Problem</h3>
+            <h3 className="text-gray-900 font-semibold mb-1">Problem</h3>
             <p className="text-gray-600 line-clamp-3">{report.problem}</p>
           </div>
           <div>
-            <h3 className="text-gray-900 font-semibold mb-2">Solution</h3>
+            <h3 className="text-gray-900 font-semibold mb-1">Solution</h3>
             <p className="text-gray-600 line-clamp-3">{report.solve}</p>
           </div>
           <div>
-            <h3 className="text-gray-900 font-semibold mb-2">Description</h3>
+            <h3 className="text-gray-900 font-semibold mb-1">Description</h3>
             <p className="text-gray-600 line-clamp-3">{report.description}</p>
           </div>
         </div>
@@ -142,18 +142,16 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
         header="Confirm Delete"
       >
         <div className="p-6">
-          <p className="text-gray-600 mb-6">Are you sure you want to delete this report?</p>
+          <p className="text-gray-600 mb-6">
+            Are you sure you want to delete this report?
+          </p>
           <div className="flex justify-end gap-3">
             <Button
               text="Cancel"
               onClick={() => setIsModalOpen(false)}
               variant="secondary"
             />
-            <Button
-              text="Delete"
-              onClick={handleDelete}
-              variant="danger"
-            />
+            <Button text="Delete" onClick={handleDelete} variant="danger" />
           </div>
         </div>
       </Modal>
@@ -179,16 +177,38 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
                   onClick={previousImage}
                   className="bg-black/50 text-white rounded-full p-3 hover:bg-black/70 transition-colors"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
                 </button>
                 <button
                   onClick={nextImage}
                   className="bg-black/50 text-white rounded-full p-3 hover:bg-black/70 transition-colors"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               </div>

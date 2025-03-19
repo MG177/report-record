@@ -16,11 +16,11 @@ import HeaderDefault from '@/components/header'
 
 // Dynamically import components that are not immediately needed
 const Search = dynamic(() => import('@/components/search'), {
-  loading: () => <Loading />
+  loading: () => <Loading />,
 })
 
 const ReportsList = dynamic(() => import('@/components/reportsList'), {
-  loading: () => <Loading />
+  loading: () => <Loading />,
 })
 
 export default function Home() {
@@ -32,7 +32,12 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false)
   const [isSorting, setIsSorting] = useState(false)
 
-  const { data, loading, error } = useFetch<IReport[]>(
+  const { data, loading, error } = useFetch<{
+    reports: IReport[]
+    total: number
+    totalPages: number
+    currentPage: number
+  }>(
     `/api/reports?sort=${sortField}&order=${sortOrder}&search=${debouncedSearchTerm}`
   )
 
@@ -50,8 +55,10 @@ export default function Home() {
   }, [searchTerm, debouncedSearch])
 
   useEffect(() => {
+    console.log(data)
+
     if (data) {
-      setReports(data)
+      setReports(data.reports)
     }
   }, [data])
 
@@ -76,7 +83,7 @@ export default function Home() {
 
   useEffect(() => {
     if (data) {
-      setReports(data)
+      setReports(data.reports)
       setIsSorting(false)
     }
   }, [data])
@@ -126,7 +133,7 @@ function ExportButton() {
     const formattedData = data.map(({ date, location, problem }) => ({
       date: convertDate(date).date,
       location,
-      problem
+      problem,
     }))
 
     exportObjectToXLS(formattedData)

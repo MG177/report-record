@@ -24,11 +24,9 @@ export default function RootLayout({
         className={`min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 text-gray-900 ${inter.className}`}
       >
         <div className="min-h-screen backdrop-blur-3xl">
-          <div className="container mx-auto px-4 py-8">
-            {children}
-          </div>
+          <div className="container mx-auto max-w-xl px-4 py-8">{children}</div>
         </div>
-        <Toaster 
+        <Toaster
           position="top-right"
           toastOptions={{
             duration: 3000,
