@@ -49,7 +49,7 @@ export default function ExportButton() {
       const response = await fetch(
         `/api/reports?startDate=${start.toISOString()}&endDate=${end.toISOString()}&sort=date&order=desc`
       )
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch data')
       }
@@ -66,22 +66,25 @@ export default function ExportButton() {
     try {
       setIsExporting(true)
       const data = await fetchData(startDate, endDate)
-      
-      if (!data || data.length === 0) {
+      const reports = data.reports
+
+      if (!reports || reports.length === 0) {
         toast.error('No data found for the selected date range')
         return
       }
 
       const baseUrl = window.location.origin
-      const formattedData = data.map(({ _id, date, location, problem, solve, description }) => ({
-        Date: convertDate(date).date,
-        // Time: convertDate(date).time,
-        Location: location,
-        Problem: problem || '',
-        Solution: solve || '',
-        Description: description || '',
-        'View Details': `${baseUrl}/reports/${_id}`,
-      }))
+      const formattedData = reports.map(
+        ({ _id, date, location, problem, solve, description }) => ({
+          Date: convertDate(date).date,
+          // Time: convertDate(date).time,
+          Location: location,
+          Problem: problem || '',
+          Solution: solve || '',
+          Description: description || '',
+          'View Details': `${baseUrl}/reports/${_id}`,
+        })
+      )
 
       exportObjectToXLS(formattedData)
       setIsModalOpen(false)
@@ -126,10 +129,10 @@ export default function ExportButton() {
 
   return (
     <>
-      <Button 
-        text="" 
-        onClick={handleExport} 
-        variant="secondary" 
+      <Button
+        text=""
+        onClick={handleExport}
+        variant="secondary"
         icon="pi-file-export"
       />
       <Modal
@@ -192,7 +195,7 @@ export default function ExportButton() {
               onClick={exportDataForRange}
               disabled={!startDate || !endDate || isExporting}
               variant="primary"
-              icon={isExporting ? "pi-spinner pi-spin" : "pi-download"}
+              icon={isExporting ? 'pi-spinner pi-spin' : 'pi-download'}
             />
           </div>
         </div>

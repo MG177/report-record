@@ -20,7 +20,7 @@ export default function Search({
   return (
     <div className="w-full mb-6">
       <div className="bg-white p-4 rounded-2xl shadow-lg border border-blue-100 space-y-4">
-        <div className="relative">
+        {/* <div className="relative">
           <input
             type="text"
             placeholder="Search reports..."
@@ -28,15 +28,19 @@ export default function Search({
             value={searchTerm}
             onChange={(e) => onSearch(e.target.value)}
           />
-          <svg 
+          <svg
             className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 20 20" 
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
             fill="currentColor"
           >
-            <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+              clipRule="evenodd"
+            />
           </svg>
-        </div>
+        </div> */}
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-gray-600 text-sm">
@@ -57,12 +61,30 @@ export default function Search({
           >
             <span className="text-sm">Order</span>
             {sortOrder === 'asc' ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
               </svg>
             )}
           </button>

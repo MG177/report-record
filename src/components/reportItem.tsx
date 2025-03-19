@@ -57,22 +57,22 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
     <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden transition-all duration-200 hover:shadow-xl">
       <div className="p-6">
         <div className="flex flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {report.images?.length > 0 ? (
               <div
-                className="w-14 h-14 rounded-xl overflow-hidden cursor-pointer shadow-md hover:shadow-lg transition-shadow"
+                className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer shadow-md hover:shadow-lg transition-shadow"
                 onClick={() => handleImageClick(0)}
               >
                 <Image
                   src={report.images[0]}
                   alt={report.location}
-                  width={56}
-                  height={56}
+                  width={48}
+                  height={48}
                   className="object-cover w-full h-full"
                 />
               </div>
             ) : (
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
                 {report.location[0]}
               </div>
             )}
@@ -81,7 +81,8 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
                 {report.location}
               </span>
               <span className="text-gray-500 text-sm">
-                {reportDate.time} | {reportDate.date}
+                {/* {reportDate.time} |  */}
+                {reportDate.date}
               </span>
             </div>
           </div>
