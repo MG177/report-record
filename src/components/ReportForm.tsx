@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ReportFormData } from '@/models/Report'
+import { ReportCreate } from '@/lib/validations/report'
 import {
   compressImage,
   formatFileSize,
@@ -9,32 +9,29 @@ import {
 } from '@/utils/imageCompression'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
-import { startOfDay } from 'date-fns'
-import { formatInTimeZone } from 'date-fns-tz'
 
 interface ImagePreview extends CompressionResult {
   id: string
 }
 
 interface ReportFormProps {
-  onSubmit: (data: ReportFormData) => Promise<void>
-  initialData?: ReportFormData
+  onSubmit: (data: ReportCreate) => Promise<void>
+  initialData?: ReportCreate
 }
 
 export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([])
-  const [formData, setFormData] = useState<ReportFormData>({
-    title: '',
-    date: new Date(
-      formatInTimeZone(new Date(), 'America/Los_Angeles', 'yyyy-MM-dd HH:mm:ss')
-    ),
-    description: '',
+  const [formData, setFormData] = useState<ReportCreate>({
     location: '',
     problem: '',
     solve: '',
     images: [],
+    date: new Date(),
+    description: '',
+    status: 'pending',
+    priority: 'medium',
   })
 
   // Initialize form with initial data if provided
@@ -42,15 +39,16 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
     if (initialData) {
       setFormData(initialData)
       // Create image previews from existing images
-      const previews: ImagePreview[] = initialData.images.map((base64) => ({
-        id: crypto.randomUUID(),
-        base64,
-        originalSize: base64.length,
-        compressedSize: base64.length,
-        width: 0, // We don't have this info for existing images
-        height: 0,
-        quality: 1,
-      }))
+      const previews: ImagePreview[] =
+        initialData.images?.map((base64) => ({
+          id: crypto.randomUUID(),
+          base64,
+          originalSize: base64.length,
+          compressedSize: base64.length,
+          width: 0, // We don't have this info for existing images
+          height: 0,
+          quality: 1,
+        })) ?? []
       setImagePreviews(previews)
     }
   }, [initialData])
@@ -93,7 +91,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
         setImagePreviews((prev) => [...prev, ...newPreviews])
         setFormData((prev) => ({
           ...prev,
-          images: [...prev.images, ...newImages],
+          images: [...(prev.images || []), ...newImages],
         }))
       } catch (error) {
         toast.error('Error processing images')
@@ -107,7 +105,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
 
   const removeImage = (id: string, index: number) => {
     const newPreviews = imagePreviews.filter((preview) => preview.id !== id)
-    const newImages = formData.images.filter((_, i) => i !== index)
+    const newImages = formData.images?.filter((_, i) => i !== index)
     setImagePreviews(newPreviews)
     setFormData({ ...formData, images: newImages })
     toast.success('Image removed')
@@ -288,7 +286,11 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
         <input
           type="datetime-local"
           className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary bg-background"
-          value={formData.date?.toISOString().split('.')[0]}
+          value={
+            formData.date instanceof Date
+              ? formData.date.toISOString().split('.')[0]
+              : ''
+          }
           onChange={(e) =>
             setFormData({
               ...formData,

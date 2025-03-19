@@ -4,7 +4,7 @@ import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import Loading from '@/components/loading'
 import ReportItem from '@/components/reportItem'
-import { IReport } from '@/models/Report'
+import { ReportDocument } from '@/models/Report'
 import useFetch from '@/hooks/useFetch'
 import { useEffect, useState, useCallback } from 'react'
 import debounce from 'lodash/debounce'
@@ -24,7 +24,7 @@ const ReportsList = dynamic(() => import('@/components/reportsList'), {
 })
 
 export default function Home() {
-  const [reports, setReports] = useState<IReport[]>([])
+  const [reports, setReports] = useState<ReportDocument[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const [sortField, setSortField] = useState('createdAt')
@@ -33,7 +33,7 @@ export default function Home() {
   const [isSorting, setIsSorting] = useState(false)
 
   const { data, loading, error } = useFetch<{
-    reports: IReport[]
+    reports: ReportDocument[]
     total: number
     totalPages: number
     currentPage: number

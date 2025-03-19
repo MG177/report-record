@@ -1,21 +1,26 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { Suspense } from 'react'
+import { useEffect, useState } from 'react'
 import { HeaderEditReports } from '@/components/header'
 import useFetch from '@/hooks/useFetch'
-import { IReport, ReportFormData } from '@/models/Report'
+import { IReport } from '@/models/Report'
 import Loading from '@/components/loading'
 import ReportForm from '@/components/ReportForm'
 import { toast } from 'react-hot-toast'
+import { ReportCreate } from '@/lib/validations/report'
 
 export default function EditReport() {
   const params = useParams()
   const router = useRouter()
   const id = params.id
-  const { data: report, loading, error } = useFetch<IReport>(`/api/reports/${id}`)
+  const {
+    data: report,
+    loading,
+    error,
+  } = useFetch<IReport>(`/api/reports/${id}`)
 
-  const handleUpdate = async (formData: ReportFormData) => {
+  const handleUpdate = async (formData: ReportCreate) => {
     try {
       const response = await fetch(`/api/reports/${id}`, {
         method: 'PUT',
@@ -24,7 +29,10 @@ export default function EditReport() {
         },
         body: JSON.stringify({
           ...formData,
-          date: formData.date?.toISOString() || '',
+          date:
+            formData.date instanceof Date
+              ? formData.date.toISOString()
+              : formData.date,
         }),
       })
 
@@ -57,16 +65,17 @@ export default function EditReport() {
       {loading ? (
         <Loading />
       ) : report ? (
-        <ReportForm 
+        <ReportForm
           onSubmit={handleUpdate}
           initialData={{
-            title: '',
             date: new Date(report.date),
             description: report.description,
             location: report.location,
             problem: report.problem as string,
             solve: report.solve as string,
-            images: report.images || [],
+            images: report.images ?? [],
+            status: report.status,
+            priority: report.priority,
           }}
         />
       ) : (

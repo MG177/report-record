@@ -3,12 +3,12 @@
 import { useRouter } from 'next/navigation'
 import { HeaderNewReports } from '../../components/header'
 import ReportForm from '../../components/ReportForm'
-import { ReportFormData } from '../../models/Report'
+import { ReportCreate } from '../../lib/validations/report'
 
 export default function CreateReport() {
   const router = useRouter()
 
-  const handleSubmit = async (formData: ReportFormData) => {
+  const handleSubmit = async (formData: ReportCreate) => {
     try {
       const response = await fetch('/api/reports', {
         method: 'POST',
@@ -17,7 +17,7 @@ export default function CreateReport() {
         },
         body: JSON.stringify({
           ...formData,
-          date: formData.date?.toISOString() || '',
+          date: formData.date?.toString() || '',
         }),
       })
 
