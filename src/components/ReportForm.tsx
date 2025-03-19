@@ -284,11 +284,11 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
       <div className="flex flex-col gap-2">
         <div className="text-2xl font-normal leading-none">Date & Time</div>
         <input
-          type="datetime-local"
+          type="date"
           className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary outline-2 outline-primary bg-background"
           value={
-            formData.date instanceof Date
-              ? formData.date.toISOString().split('.')[0]
+            formData.date instanceof Date && !isNaN(formData.date.getTime())
+              ? formData.date.toISOString().split('T')[0]
               : ''
           }
           onChange={(e) =>
