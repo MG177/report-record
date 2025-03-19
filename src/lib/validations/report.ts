@@ -4,6 +4,7 @@ export const reportCreateSchema = z.object({
   location: z.string().min(1, 'Location is required'),
   problem: z.string().min(1, 'Problem is required'),
   solve: z.string().min(1, 'Solution is required'),
+  images: z.array(z.string()).optional(),
   description: z.string().optional(),
   date: z
     .string()
