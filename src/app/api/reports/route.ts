@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ReportService } from '@/models/Report'
-import { reportCreateSchema, reportQuerySchema } from '@/lib/validations/report'
+import { reportCreateSchema, reportQuerySchema } from '@lib/validations/report'
 import { ZodError } from 'zod'
 
 // Error handler utility

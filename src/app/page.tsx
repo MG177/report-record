@@ -2,11 +2,11 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import debounce from 'lodash/debounce'
-import HeaderDefault from '@/components/header'
+import HeaderDefault from '@components/header'
 import { ReportDocument } from '@/models/Report'
-import useFetch from '@/hooks/useFetch'
-import Loading from '@/components/Loading'
-import ReportItem from '@/components/reportItem'
+import useFetch from '@hooks/useFetch'
+import Loading from '@components/Loading'
+import ReportItem from '@components/reportItem'
 export default function Home() {
   const [reports, setReports] = useState<ReportDocument[]>([])
   const [searchTerm, setSearchTerm] = useState('')

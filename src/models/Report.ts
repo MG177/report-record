@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose'
-import { ReportCreate } from '@/lib/validations/report'
+import { ReportCreate } from '@lib/validations/report'
 
 export interface IReport {
   location: string

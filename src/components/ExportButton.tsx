@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import Button from './button'
 import Modal from './modal'
-import { exportObjectToXLS } from '@/utils/exportXLS'
-import convertDate from '@/utils/convertDate'
+import { exportObjectToXLS } from '@utils/exportXLS'
+import convertDate from '@utils/convertDate'
 import { toast } from 'react-hot-toast'
 
 interface DateInputProps {

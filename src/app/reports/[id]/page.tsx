@@ -1,13 +1,13 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import useFetch from '@/hooks/useFetch'
+import useFetch from '@hooks/useFetch'
 import { IReport } from '@/models/Report'
-import Loading from '@/components/Loading'
+import Loading from '@components/Loading'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
-import convertDate from '@/utils/convertDate'
+import convertDate from '@utils/convertDate'
 
 export default function ReportDetail() {
   const params = useParams()

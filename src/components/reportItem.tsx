@@ -1,5 +1,5 @@
 import { IReport, ReportDocument } from '@/models/Report'
-import convertDate from '@/utils/convertDate'
+import convertDate from '@utils/convertDate'
 import React, { useState } from 'react'
 import Button from './button'
 import Modal from './modal'

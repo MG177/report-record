@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ReportCreate } from '@/lib/validations/report'
+import { ReportCreate } from '@lib/validations/report'
 import {
   compressImage,
   formatFileSize,
   CompressionResult,
-} from '@/utils/imageCompression'
+} from '@utils/imageCompression'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
 

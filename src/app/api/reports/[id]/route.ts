@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { dbConnect } from '@/utils/dbConnect'
+import { dbConnect } from '@utils/dbConnect'
 import Report from '@/models/Report'
 
 export async function GET(
