@@ -64,9 +64,7 @@ export default function Home() {
   }, [data])
 
   if (loading) {
-    return (
-        <Loading />
-    )
+    return <Loading />
   }
 
   if (error) {

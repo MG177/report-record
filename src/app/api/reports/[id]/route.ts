@@ -46,10 +46,7 @@ export async function PUT(
     )
 
     if (!updatedReport) {
-      return NextResponse.json(
-        { error: 'Report not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Report not found' }, { status: 404 })
     }
 
     return NextResponse.json(updatedReport)
@@ -71,10 +68,7 @@ export async function DELETE(
     const report = await Report.findByIdAndDelete(params.id)
 
     if (!report) {
-      return NextResponse.json(
-        { error: 'Report not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Report not found' }, { status: 404 })
     }
 
     return NextResponse.json({ message: 'Report deleted successfully' })
