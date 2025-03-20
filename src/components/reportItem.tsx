@@ -13,7 +13,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  const reportDate = convertDate(report.date)
+  const reportDate = convertDate(report.date.toString())
 
   const handleDelete = async () => {
     try {

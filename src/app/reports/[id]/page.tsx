@@ -12,7 +12,11 @@ import convertDate from '@/utils/convertDate'
 export default function ReportDetail() {
   const params = useParams()
   const id = params.id
-  const { data: report, loading, error } = useFetch<IReport>(`/api/reports/${id}`)
+  const {
+    data: report,
+    loading,
+    error,
+  } = useFetch<IReport>(`/api/reports/${id}`)
 
   if (error) {
     toast.error('Failed to load report')
@@ -21,7 +25,7 @@ export default function ReportDetail() {
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-2xl shadow-lg border border-blue-100 p-6">
             <div className="text-red-500">Error loading report</div>
-            <Link 
+            <Link
               href="/"
               className="text-blue-600 hover:text-blue-700 mt-4 inline-block"
             >
@@ -43,7 +47,7 @@ export default function ReportDetail() {
     )
   }
 
-  const reportDate = convertDate(report.date)
+  const reportDate = convertDate(report.date.toString())
 
   return (
     <main className="min-h-screen py-8">
@@ -54,7 +58,7 @@ export default function ReportDetail() {
             <div className="p-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                  <Link 
+                  <Link
                     href="/"
                     className="text-blue-600 hover:text-blue-700 mb-4 inline-block"
                   >
@@ -65,7 +69,9 @@ export default function ReportDetail() {
                   </h1>
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-semibold text-gray-900">{report.location}</div>
+                  <div className="text-lg font-semibold text-gray-900">
+                    {report.location}
+                  </div>
                   <div className="text-sm text-gray-500">
                     {reportDate.date} at {reportDate.time}
                   </div>
@@ -110,7 +116,9 @@ export default function ReportDetail() {
 
               {/* Solution */}
               <div className="space-y-2">
-                <h2 className="text-xl font-semibold text-gray-900">Solution</h2>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Solution
+                </h2>
                 <div className="bg-gray-50 rounded-xl p-4 text-gray-700">
                   {report.solve || 'No solution provided'}
                 </div>
@@ -119,7 +127,9 @@ export default function ReportDetail() {
 
             {/* Description */}
             <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-gray-900">Description</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Description
+              </h2>
               <div className="bg-gray-50 rounded-xl p-4 text-gray-700">
                 {report.description || 'No additional description provided'}
               </div>

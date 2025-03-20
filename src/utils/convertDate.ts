@@ -12,9 +12,24 @@ import { formatDateTime } from './dateLocalization'
  *              time: "11:22 GMT+8" // Time zone will be based on user's location
  *          }
  */
-export default function convertDate(isoString: Date): {
+export default function convertDate(isoString: string): {
   date: string
   time: string
 } {
-  return formatDateTime(isoString)
+  // return formatDateTime(isoString)
+  const date = new Date(isoString) // Convert the string into a Date object
+
+  return {
+    date: date.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    }),
+    time: date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    }),
+  }
 }
