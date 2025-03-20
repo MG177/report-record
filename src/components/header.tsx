@@ -38,8 +38,8 @@ export default function HeaderDefault({ title, description }: HeadingProps) {
 export function HeaderNewReports() {
   return (
     <div className="w-full mb-8">
-      <div className="bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="bg-white p-4 rounded-2xl shadow-lg border border-blue-100">
+        <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             <Link
               href="/"
@@ -70,8 +70,8 @@ export function HeaderNewReports() {
 export function HeaderEditReports() {
   return (
     <div className="w-full mb-8">
-      <div className="bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="bg-white p-4 rounded-2xl shadow-lg border border-blue-100">
+        <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             <Link
               href="/"
