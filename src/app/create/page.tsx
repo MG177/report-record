@@ -1,9 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { HeaderNewReports } from '../../components/header'
-import ReportForm from '../../components/reportForm'
-import { ReportCreate } from '../../lib/validations/report'
+import { HeaderNewReports } from '@/components/header'
+import ReportForm from '@/components/reportForm'
+import { ReportCreate } from '@/lib/validations/report'
 
 export default function CreateReport() {
   const router = useRouter()
