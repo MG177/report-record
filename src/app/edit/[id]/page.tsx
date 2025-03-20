@@ -1,11 +1,10 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { HeaderEditReports } from '@/components/header'
 import useFetch from '@/hooks/useFetch'
 import { IReport } from '@/models/Report'
-import Loading from '@/components/loading'
+import Loading from '@/components/Loading'
 import ReportForm from '@/components/reportForm'
 import { toast } from 'react-hot-toast'
 import { ReportCreate } from '@/lib/validations/report'
