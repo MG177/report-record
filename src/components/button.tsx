@@ -25,8 +25,10 @@ export default function Button({
   className = '',
 }: ButtonProps) {
   // Base styles with conditional padding based on whether there's text
-  const baseStyles = `${text ? 'px-5' : 'px-4'} py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md min-w-[2.5rem]`
-  
+  const baseStyles = `${
+    text ? 'px-3' : 'px-3'
+  } py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md min-w-[2.5rem]`
+
   const variantStyles = {
     primary: 'bg-blue-600 hover:bg-blue-700 text-white',
     secondary: 'bg-white border border-blue-200 text-blue-700 hover:bg-blue-50',
@@ -37,9 +39,13 @@ export default function Button({
 
   const content = (
     <>
-      {icon && iconPos === 'left' && <i className={`pi ${icon} ${!text ? 'text-lg' : ''}`} />}
+      {icon && iconPos === 'left' && (
+        <i className={`pi ${icon} ${!text ? 'text-base' : ''}`} />
+      )}
       {text}
-      {icon && iconPos === 'right' && <i className={`pi ${icon} ${!text ? 'text-lg' : ''}`} />}
+      {icon && iconPos === 'right' && (
+        <i className={`pi ${icon} ${!text ? 'text-base' : ''}`} />
+      )}
     </>
   )
 

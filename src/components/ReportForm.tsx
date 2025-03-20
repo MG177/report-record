@@ -273,7 +273,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
         <div className="text-2xl font-normal leading-none">Location</div>
         <input
           type="text"
-          className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary/50 outline-2 outline-secondary"
+          className="w-full h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary"
           value={formData.location}
           onChange={(e) =>
             setFormData({ ...formData, location: e.target.value })
@@ -285,7 +285,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
         <div className="text-2xl font-normal leading-none">Date & Time</div>
         <input
           type="date"
-          className="w-full h-10 py-1 px-2 rounded-xl border-2 border-secondary/50 outline-2 outline-secondary bg-background"
+          className="w-full h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary bg-background"
           value={
             formData.date instanceof Date && !isNaN(formData.date.getTime())
               ? formData.date.toISOString().split('T')[0]
@@ -303,7 +303,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
       <div className="flex flex-col gap-2">
         <div className="text-2xl font-normal leading-none">Problem</div>
         <textarea
-          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-secondary/50 outline-2 outline-secondary resize-none colors-text"
+          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary resize-none colors-text"
           value={formData.problem}
           onChange={(e) =>
             setFormData({
@@ -317,7 +317,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
       <div className="flex flex-col gap-2">
         <div className="text-2xl font-normal leading-none">Solution</div>
         <textarea
-          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-secondary/50 outline-2 outline-secondary resize-none colors-text"
+          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary resize-none colors-text"
           value={formData.solve}
           onChange={(e) =>
             setFormData({
@@ -331,7 +331,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
       <div className="flex flex-col gap-2">
         <div className="text-2xl font-normal leading-none">Description</div>
         <textarea
-          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-secondary/50 outline-2 outline-secondary resize-none colors-text"
+          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary resize-none colors-text"
           value={formData.description}
           onChange={(e) =>
             setFormData({

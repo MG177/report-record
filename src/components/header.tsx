@@ -10,7 +10,7 @@ interface HeadingProps {
 export default function HeaderDefault({ title, description }: HeadingProps) {
   return (
     <div className="w-full mb-8">
-      <div className="flex flex-row justify-between items-center gap-4 bg-white p-6 rounded-2xl shadow-lg border border-blue-100">
+      <div className="flex flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl shadow-lg border border-blue-100">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-md">
             {title.charAt(0)}
@@ -60,7 +60,7 @@ export function HeaderNewReports() {
               <span className="font-medium">Back</span>
             </Link>
           </div>
-          <h1 className="text-gray-900 text-3xl font-bold">New Report</h1>
+          <h1 className="text-gray-900 text-2xl font-bold">New Report</h1>
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@ export function HeaderEditReports() {
               <span className="font-medium">Back</span>
             </Link>
           </div>
-          <h1 className="text-gray-900 text-3xl font-bold">Edit Report</h1>
+          <h1 className="text-gray-900 text-2xl font-bold">Edit Report</h1>
         </div>
       </div>
     </div>
