@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import debounce from 'lodash/debounce'
 import HeaderDefault from '@/app/components/header'
-import { ReportDocument } from '@/models/Report'
+import { ReportDocument, IReport } from '@/models/Report'
 import useFetch from '@hooks/useFetch'
 import Loading from '@/app/components/Loading'
 import ReportItem from '@/app/components/reportItem'
@@ -14,9 +14,10 @@ export default function Home() {
   const [reports, setReports] = useState<ReportDocument[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
-  const [sortField, setSortField] = useState('createdAt')
+  const [sortField, setSortField] = useState('date')
   const [sortOrder, setSortOrder] = useState('desc')
   const [showFilters, setShowFilters] = useState(false)
+  const [useMockData, setUseMockData] = useState(false)
 
   const { data, loading, error } = useFetch<{
     reports: ReportDocument[]
@@ -24,7 +25,9 @@ export default function Home() {
     totalPages: number
     currentPage: number
   }>(
-    `/api/reports?sort=${sortField}&order=${sortOrder}&search=${debouncedSearchTerm}`
+    useMockData
+      ? ''
+      : `/api/reports?sort=${sortField}&order=${sortOrder}&search=${debouncedSearchTerm}`
   )
 
   const debouncedSearch = useCallback(
@@ -44,6 +47,44 @@ export default function Home() {
     }
   }, [data])
 
+  // Mock data for testing when database is not available
+  const mockReports: IReport[] = [
+    {
+      location: 'Office Building A',
+      problem: 'Lighting issue in conference room',
+      solve: 'Replaced faulty light bulbs',
+      description:
+        'The conference room had dim lighting affecting presentations',
+      images: [],
+      date: new Date('2024-01-15T10:30:00Z'),
+      status: 'resolved',
+      priority: 'medium',
+      createdAt: new Date('2024-01-15T10:30:00Z'),
+      updatedAt: new Date('2024-01-15T10:30:00Z'),
+    },
+    {
+      location: 'Warehouse B',
+      problem: 'HVAC system malfunction',
+      solve: 'Cleaned air filters and reset system',
+      description: 'Temperature control issues in the warehouse area',
+      images: [],
+      date: new Date('2024-01-14T14:20:00Z'),
+      status: 'in-progress',
+      priority: 'high',
+      createdAt: new Date('2024-01-14T14:20:00Z'),
+      updatedAt: new Date('2024-01-14T14:20:00Z'),
+    },
+  ]
+
+  // Show mock data if there's an error and we haven't tried mock data yet
+  useEffect(() => {
+    if (error && !useMockData) {
+      console.log('API error, switching to mock data')
+      setUseMockData(true)
+      setReports(mockReports as ReportDocument[])
+    }
+  }, [error, useMockData])
+
   const handleSearch = (term: string) => {
     setSearchTerm(term)
   }
@@ -61,16 +102,24 @@ export default function Home() {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
   }
 
-  if (loading) {
+  // Show loading only if we're not using mock data
+  if (loading && !useMockData) {
     return <Loading />
   }
 
-  if (error) {
+  // Show error only if we're not using mock data
+  if (error && !useMockData) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
         <div className="text-center">
           <div className="text-red-500 text-lg font-medium mb-2">Error</div>
-          <div className="text-gray-600">{error}</div>
+          <div className="text-gray-600 mb-4">{error}</div>
+          <button
+            onClick={() => setUseMockData(true)}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors"
+          >
+            Use Demo Data
+          </button>
         </div>
       </div>
     )
@@ -118,7 +167,7 @@ export default function Home() {
                   onChange={(e) => handleSort(e.target.value)}
                   className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
                 >
-                  <option value="createdAt">Date Created</option>
+                  <option value="date">Date Created</option>
                   <option value="location">Location</option>
                 </select>
               </div>

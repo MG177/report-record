@@ -8,13 +8,25 @@ function useFetch<T>(url: string) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
+        setError(null)
+
+        console.log('Fetching:', url) // Debug log
+
         const response = await fetch(url)
+
         if (!response.ok) {
-          throw new Error('Network response was not ok')
+          const errorText = await response.text()
+          console.error('API Error:', response.status, errorText) // Debug log
+          throw new Error(`HTTP ${response.status}: ${errorText}`)
         }
+
         const result = await response.json()
+        console.log('API Response:', result) // Debug log
+
         setData(result)
       } catch (error) {
+        console.error('Fetch error:', error) // Debug log
         if (error instanceof Error) {
           setError(error.message)
         } else {

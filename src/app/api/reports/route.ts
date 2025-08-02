@@ -30,7 +30,11 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
+    console.log('Reports API called') // Debug log
+
     const searchParams = req.nextUrl.searchParams
+    console.log('Search params:', Object.fromEntries(searchParams.entries())) // Debug log
+
     const validatedQuery = reportQuerySchema.parse({
       page: searchParams.get('page') || 1,
       limit: searchParams.get('limit') || 10,
@@ -42,6 +46,8 @@ export async function GET(req: NextRequest) {
       status: searchParams.get('status') || undefined,
       priority: searchParams.get('priority') || undefined,
     })
+
+    console.log('Validated query:', validatedQuery) // Debug log
 
     const {
       page,
@@ -83,12 +89,17 @@ export async function GET(req: NextRequest) {
     if (status) query.status = status
     if (priority) query.priority = priority
 
+    console.log('MongoDB query:', query) // Debug log
+    console.log('Sort options:', sortOptions) // Debug log
+
     const result = await ReportService.getReports(
       query,
       page,
       limit,
       sortOptions
     )
+
+    console.log('API result:', result) // Debug log
 
     return NextResponse.json(result, {
       status: 200,
@@ -99,6 +110,7 @@ export async function GET(req: NextRequest) {
       },
     })
   } catch (error) {
+    console.error('Reports API error:', error) // Debug log
     return handleError(error)
   }
 }

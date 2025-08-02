@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Button from './button'
 import ExportButton from './ExportButton'
-import { Plus, ArrowLeft } from 'lucide-react'
+import { Plus, ArrowLeft, Calendar } from 'lucide-react'
 
 interface HeadingProps {
   title: string
@@ -10,7 +10,7 @@ interface HeadingProps {
 
 export default function HeaderDefault({ title, description }: HeadingProps) {
   return (
-    <div className="w-full z-10">
+    <div className="w-full mb-6">
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -29,6 +29,13 @@ export default function HeaderDefault({ title, description }: HeadingProps) {
             </div>
           </div>
           <div className="flex gap-2 sm:gap-3">
+            <Link
+              href="/calendar"
+              className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl font-medium transition-colors"
+            >
+              <Calendar className="h-4 w-4" />
+              <span className="hidden sm:inline">Calendar</span>
+            </Link>
             <Button
               text="New Report"
               link="/create"

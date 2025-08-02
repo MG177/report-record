@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose'
 import { ReportCreate } from '@lib/validations/report'
+import { dbConnect } from '@utils/dbConnect'
 
 export interface IReport {
   location: string
@@ -42,13 +43,13 @@ const reportSchema = new Schema<ReportDocument>(
 
 // Add text index for search
 reportSchema.index(
-  { location: 'text', problem: 'text', description: 'text', solve: 'text' },
-  { weights: { location: 3, problem: 2, description: 1, solve: 1 } }
+  { location: 'text', problem: 'text', description: 'text' },
+  { weights: { location: 3, problem: 2, description: 1 } }
 )
 
 export class ReportService {
   static async createReport(data: ReportCreate): Promise<ReportDocument> {
-    await mongoose.connect(process.env.MONGODB_URI!)
+    await dbConnect()
     return await Report.create(data)
   }
 
@@ -63,19 +64,34 @@ export class ReportService {
     totalPages: number
     currentPage: number
   }> {
-    await mongoose.connect(process.env.MONGODB_URI!)
+    try {
+      console.log('ReportService.getReports called') // Debug log
+      console.log('Query:', query) // Debug log
+      console.log('Sort:', sort) // Debug log
 
-    const skip = (page - 1) * limit
-    const [reports, total] = await Promise.all([
-      Report.find(query).sort(sort).skip(skip).limit(limit).lean(),
-      Report.countDocuments(query),
-    ])
+      await dbConnect()
+      console.log('Database connected successfully') // Debug log
 
-    return {
-      reports: reports as unknown as IReport[],
-      total,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
+      const skip = (page - 1) * limit
+      console.log('Skip:', skip, 'Limit:', limit) // Debug log
+
+      const [reports, total] = await Promise.all([
+        Report.find(query).sort(sort).skip(skip).limit(limit).lean(),
+        Report.countDocuments(query),
+      ])
+
+      console.log('Reports found:', reports.length) // Debug log
+      console.log('Total count:', total) // Debug log
+
+      return {
+        reports: reports as unknown as IReport[],
+        total,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      }
+    } catch (error) {
+      console.error('ReportService.getReports error:', error) // Debug log
+      throw error
     }
   }
 
@@ -83,12 +99,12 @@ export class ReportService {
     id: string,
     data: Partial<ReportCreate>
   ): Promise<ReportDocument | null> {
-    await mongoose.connect(process.env.MONGODB_URI!)
+    await dbConnect()
     return await Report.findByIdAndUpdate(id, data, { new: true })
   }
 
   static async deleteReport(id: string): Promise<ReportDocument | null> {
-    await mongoose.connect(process.env.MONGODB_URI!)
+    await dbConnect()
     return await Report.findByIdAndDelete(id)
   }
 }

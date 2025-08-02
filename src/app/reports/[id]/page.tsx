@@ -59,7 +59,7 @@ export default function ReportDetail() {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                   <Link
-                    href="/"
+                    href="javascript:history.back()"
                     className="text-blue-600 hover:text-blue-700 mb-4 inline-block"
                   >
                     ← Back to Reports
