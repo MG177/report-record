@@ -42,8 +42,8 @@ const reportSchema = new Schema<ReportDocument>(
 
 // Add text index for search
 reportSchema.index(
-  { location: 'text', problem: 'text', description: 'text' },
-  { weights: { location: 3, problem: 2, description: 1 } }
+  { location: 'text', problem: 'text', description: 'text', solve: 'text' },
+  { weights: { location: 3, problem: 2, description: 1, solve: 1 } }
 )
 
 export class ReportService {

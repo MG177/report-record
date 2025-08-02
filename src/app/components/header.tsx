@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Button from './button'
 import ExportButton from './ExportButton'
+import { Plus, ArrowLeft } from 'lucide-react'
 
 interface HeadingProps {
   title: string
@@ -9,26 +10,34 @@ interface HeadingProps {
 
 export default function HeaderDefault({ title, description }: HeadingProps) {
   return (
-    <div className="w-full mb-8">
-      <div className="flex flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl shadow-lg border border-blue-100">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-md">
-            {title.charAt(0)}
+    <div className="w-full mb-6">
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white text-xl font-bold shadow-lg">
+              {title.charAt(0)}
+            </div>
+            <div className="flex flex-col">
+              <h1 className="text-gray-900 text-xl sm:text-2xl lg:text-3xl font-bold">
+                {title}
+              </h1>
+              {description && (
+                <p className="text-gray-600 text-sm sm:text-base mt-1">
+                  {description}
+                </p>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-gray-900 text-xl sm:text-2xl md:text-3xl font-bold">
-              {title}
-            </span>
-            {description && (
-              <span className="text-gray-600 text-sm sm:text-base">
-                {description}
-              </span>
-            )}
+          <div className="flex gap-2 sm:gap-3">
+            <Button
+              text="New Report"
+              link="/create"
+              variant="primary"
+              icon="pi-plus"
+              className="flex-1 sm:flex-none"
+            />
+            <ExportButton />
           </div>
-        </div>
-        <div className="flex gap-3">
-          <Button text="" link="/create" variant="primary" icon="pi-plus" />
-          <ExportButton />
         </div>
       </div>
     </div>
@@ -37,30 +46,22 @@ export default function HeaderDefault({ title, description }: HeadingProps) {
 
 export function HeaderNewReports() {
   return (
-    <div className="w-full mb-8">
-      <div className="bg-white p-4 rounded-2xl shadow-lg border border-blue-100">
-        <div className="flex flex-row justify-between items-center gap-4">
+    <div className="w-full mb-6">
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="flex items-center gap-2 text-blue-700 hover:text-blue-800 transition-colors"
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors p-2 rounded-lg hover:bg-blue-50"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="font-medium">Back</span>
+              <ArrowLeft className="h-5 w-5" />
+              <span className="font-medium hidden sm:inline">Back</span>
             </Link>
           </div>
-          <h1 className="text-gray-900 text-2xl font-bold">New Report</h1>
+          <h1 className="text-gray-900 text-xl sm:text-2xl font-bold">
+            New Report
+          </h1>
+          <div className="w-10 sm:w-12" /> {/* Spacer for centering */}
         </div>
       </div>
     </div>
@@ -69,30 +70,22 @@ export function HeaderNewReports() {
 
 export function HeaderEditReports() {
   return (
-    <div className="w-full mb-8">
-      <div className="bg-white p-4 rounded-2xl shadow-lg border border-blue-100">
-        <div className="flex flex-row justify-between items-center gap-4">
+    <div className="w-full mb-6">
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="flex items-center gap-2 text-blue-700 hover:text-blue-800 transition-colors"
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors p-2 rounded-lg hover:bg-blue-50"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="font-medium">Back</span>
+              <ArrowLeft className="h-5 w-5" />
+              <span className="font-medium hidden sm:inline">Back</span>
             </Link>
           </div>
-          <h1 className="text-gray-900 text-2xl font-bold">Edit Report</h1>
+          <h1 className="text-gray-900 text-xl sm:text-2xl font-bold">
+            Edit Report
+          </h1>
+          <div className="w-10 sm:w-12" /> {/* Spacer for centering */}
         </div>
       </div>
     </div>

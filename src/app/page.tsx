@@ -7,12 +7,16 @@ import { ReportDocument } from '@/models/Report'
 import useFetch from '@hooks/useFetch'
 import Loading from '@/app/components/Loading'
 import ReportItem from '@/app/components/reportItem'
+import FloatingActionButton from '@/app/components/FloatingActionButton'
+import { Search, Filter, SortAsc, SortDesc } from 'lucide-react'
+
 export default function Home() {
   const [reports, setReports] = useState<ReportDocument[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const [sortField, setSortField] = useState('createdAt')
   const [sortOrder, setSortOrder] = useState('desc')
+  const [showFilters, setShowFilters] = useState(false)
 
   const { data, loading, error } = useFetch<{
     reports: ReportDocument[]
@@ -26,7 +30,7 @@ export default function Home() {
   const debouncedSearch = useCallback(
     debounce((term: string) => {
       setDebouncedSearchTerm(term)
-    }, 3000),
+    }, 500),
     []
   )
 
@@ -57,106 +61,111 @@ export default function Home() {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
   }
 
-  useEffect(() => {
-    if (data) {
-      setReports(data.reports)
-    }
-  }, [data])
-
   if (loading) {
     return <Loading />
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div>Error: {error}</div>
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <div className="text-center">
+          <div className="text-red-500 text-lg font-medium mb-2">Error</div>
+          <div className="text-gray-600">{error}</div>
+        </div>
       </div>
     )
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-4 sm:p-6 md:p-9 w-full max-w-7xl mx-auto font-['Calibri']">
+    <main className="min-h-screen">
+      {/* Header */}
       <HeaderDefault title="Reports" />
-      <div className="w-full mb-6">
-        <div className="bg-white p-4 rounded-2xl shadow-lg border border-blue-100 space-y-4">
-          {/* <div className="relative">
-          <input
-            type="text"
-            placeholder="Search reports..."
-            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-lg placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            value={searchTerm}
-            onChange={(e) => onSearch(e.target.value)}
-          />
-          <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-              clipRule="evenodd"
+
+      {/* Floating Search Bar */}
+      <div className="sticky top-4 z-10 mb-6">
+        <div className="relative">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <input
+              type="text"
+              placeholder="Search reports..."
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-12 pr-20 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
             />
-          </svg>
-        </div> */}
-
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-gray-600 text-sm">
-              <span>Sort by:</span>
-              <select
-                value={sortField}
-                onChange={(e) => handleSort(e.target.value)}
-                className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
-              >
-                <option value="createdAt">Date</option>
-                <option value="location">Location</option>
-              </select>
-            </div>
-
             <button
-              onClick={handleSortOrderChange}
-              className="flex items-center gap-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              onClick={() => setShowFilters(!showFilters)}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-gray-400 hover:text-gray-600 transition-colors"
             >
-              <span className="text-sm">Order</span>
-              {sortOrder === 'asc' ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
+              <Filter className="h-5 w-5" />
             </button>
           </div>
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-4">
-        {reports.map((report, index) => (
-          <ReportItem key={index} report={report} />
-        ))}
+      {/* Filters Panel */}
+      {showFilters && (
+        <div className="mb-6 animate-in slide-in-from-top-2 duration-300">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sort by
+                </label>
+                <select
+                  value={sortField}
+                  onChange={(e) => handleSort(e.target.value)}
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer"
+                >
+                  <option value="createdAt">Date Created</option>
+                  <option value="location">Location</option>
+                </select>
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  onClick={handleSortOrderChange}
+                  className="flex items-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                >
+                  <span className="text-sm font-medium">Order</span>
+                  {sortOrder === 'asc' ? (
+                    <SortAsc className="h-4 w-4" />
+                  ) : (
+                    <SortDesc className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reports Grid */}
+      <div className="space-y-4">
+        {reports.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-gray-400 text-6xl mb-4">📋</div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No reports found
+            </h3>
+            <p className="text-gray-500">
+              {searchTerm
+                ? 'Try adjusting your search terms'
+                : 'Create your first report to get started'}
+            </p>
+          </div>
+        ) : (
+          reports.map((report, index) => (
+            <ReportItem key={index} report={report} />
+          ))
+        )}
       </div>
+
+      {/* Floating Action Button */}
+      <FloatingActionButton />
+
+      {/* Bottom Spacing for Mobile */}
+      <div className="h-20 sm:hidden" />
     </main>
   )
 }

@@ -4,6 +4,15 @@ import React, { useState } from 'react'
 import Button from './button'
 import Modal from './modal'
 import Image from 'next/image'
+import {
+  Edit,
+  Trash2,
+  Calendar,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+  X,
+} from 'lucide-react'
 
 interface ReportItemProps {
   report: ReportDocument
@@ -54,13 +63,14 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden transition-all duration-200 hover:shadow-xl">
-      <div className="p-6">
-        <div className="flex flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 overflow-hidden transition-all duration-200 hover:shadow-xl">
+      {/* Header */}
+      <div className="p-4 sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3 flex-1 min-w-0">
             {report.images?.length > 0 ? (
               <div
-                className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer shadow-md hover:shadow-lg transition-shadow"
+                className="w-12 h-12 rounded-xl overflow-hidden cursor-pointer shadow-md hover:shadow-lg transition-shadow flex-shrink-0"
                 onClick={() => handleImageClick(0)}
               >
                 <Image
@@ -72,97 +82,145 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
                 />
               </div>
             ) : (
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
                 {report.location[0]}
               </div>
             )}
-            <div className="flex flex-col">
-              <span className="text-gray-900 text-xl font-semibold">
+            <div className="flex flex-col min-w-0 flex-1">
+              <h3 className="text-gray-900 text-lg sm:text-xl font-semibold truncate">
                 {report.location}
-              </span>
-              <div className="text-sm text-gray-500">
-                {reportDateTime.date} at {reportDateTime.time}
+              </h3>
+              <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  <span>{reportDateTime.date}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-4 w-4" />
+                  <span>{reportDateTime.time}</span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex gap-2 self-end sm:self-auto">
-            <Button
-              text=""
+          <div className="flex gap-2 flex-shrink-0">
+            <button
               onClick={handleEdit}
-              variant="secondary"
-              icon="pi-pencil"
-            />
-            <Button
-              text=""
+              className="p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+              aria-label="Edit report"
+            >
+              <Edit className="h-5 w-5" />
+            </button>
+            <button
               onClick={openDeleteModal}
-              variant="danger"
-              icon="pi-trash"
-            />
+              className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+              aria-label="Delete report"
+            >
+              <Trash2 className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
+        {/* Image Gallery */}
         {report.images?.length > 0 && (
-          <div className="mt-6 grid grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
-            {report.images.map((image, index) => (
-              <div
-                key={index}
-                className="relative aspect-square cursor-pointer rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-                onClick={() => handleImageClick(index)}
-              >
-                <Image
-                  src={image}
-                  alt={`${report.location} ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
+          <div className="mt-4 sm:mt-6">
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3">
+              {report.images.slice(0, 6).map((image, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-square cursor-pointer rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow group"
+                  onClick={() => handleImageClick(index)}
+                >
+                  <Image
+                    src={image}
+                    alt={`${report.location} ${index + 1}`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-200"
+                  />
+                  {index === 5 && report.images.length > 6 && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <span className="text-white text-sm font-medium">
+                        +{report.images.length - 6}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        <div className="mt-6 space-y-4">
+        {/* Content */}
+        <div className="mt-4 sm:mt-6 space-y-4">
           <div>
-            <h3 className="text-gray-900 font-semibold mb-1">Problem</h3>
-            <p className="text-gray-600 line-clamp-3">{report.problem}</p>
+            <h4 className="text-gray-900 font-semibold mb-2 text-sm sm:text-base">
+              Problem
+            </h4>
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed line-clamp-3">
+              {report.problem}
+            </p>
           </div>
           <div>
-            <h3 className="text-gray-900 font-semibold mb-1">Solution</h3>
-            <p className="text-gray-600 line-clamp-3">{report.solve}</p>
+            <h4 className="text-gray-900 font-semibold mb-2 text-sm sm:text-base">
+              Solution
+            </h4>
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed line-clamp-3">
+              {report.solve}
+            </p>
           </div>
           <div>
-            <h3 className="text-gray-900 font-semibold mb-1">Description</h3>
-            <p className="text-gray-600 line-clamp-3">{report.description}</p>
+            <h4 className="text-gray-900 font-semibold mb-2 text-sm sm:text-base">
+              Description
+            </h4>
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed line-clamp-3">
+              {report.description}
+            </p>
           </div>
         </div>
       </div>
 
+      {/* Delete Confirmation Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         header="Confirm Delete"
       >
         <div className="p-6">
-          <p className="text-gray-600 mb-6">
-            Are you sure you want to delete this report?
+          <p className="text-gray-600 mb-6 text-center">
+            Are you sure you want to delete this report? This action cannot be
+            undone.
           </p>
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 justify-end">
             <Button
               text="Cancel"
               onClick={() => setIsModalOpen(false)}
               variant="secondary"
+              className="flex-1 sm:flex-none"
             />
-            <Button text="Delete" onClick={handleDelete} variant="danger" />
+            <Button
+              text="Delete"
+              onClick={handleDelete}
+              variant="danger"
+              className="flex-1 sm:flex-none"
+            />
           </div>
         </div>
       </Modal>
 
+      {/* Image Modal */}
       <Modal
         isOpen={isImageModalOpen}
         onClose={() => setIsImageModalOpen(false)}
-        header="Report Images"
+        header=""
       >
         <div className="relative w-full">
-          <div className="relative w-full h-[60vh]">
+          <button
+            onClick={() => setIsImageModalOpen(false)}
+            className="absolute top-4 right-4 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+
+          <div className="relative w-full h-[60vh] sm:h-[70vh]">
             <Image
               src={report.images?.[selectedImageIndex] || ''}
               alt={`${report.location} ${selectedImageIndex + 1}`}
@@ -170,6 +228,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
               className="object-contain"
             />
           </div>
+
           {report.images && report.images.length > 1 && (
             <>
               <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-4">
@@ -177,43 +236,17 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
                   onClick={previousImage}
                   className="bg-black/50 text-white rounded-full p-3 hover:bg-black/70 transition-colors"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
+                  <ChevronLeft className="h-6 w-6" />
                 </button>
                 <button
                   onClick={nextImage}
                   className="bg-black/50 text-white rounded-full p-3 hover:bg-black/70 transition-colors"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+                  <ChevronRight className="h-6 w-6" />
                 </button>
               </div>
-              <div className="text-center mt-4 text-gray-600">
-                {selectedImageIndex + 1} / {report.images.length}
+              <div className="text-center mt-4 text-gray-600 font-medium">
+                {selectedImageIndex + 1} of {report.images.length}
               </div>
             </>
           )}

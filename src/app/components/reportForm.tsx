@@ -135,18 +135,15 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full h-fit mt-2 flex flex-col gap-4 mb-20"
-    >
-      <div className="flex flex-col gap-2">
-        <div className="text-2xl font-normal leading-none mb-4 text-gray-900">
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6 pb-32">
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
           Images
-        </div>
-        <div className="bg-white p-6 rounded-2xl border border-blue-100 shadow-sm">
+        </h2>
+        <div className="bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border border-gray-200 shadow-lg">
           {imagePreviews.length > 0 ? (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
                 {imagePreviews.map((preview, index) => (
                   <div
                     key={preview.id}
@@ -232,7 +229,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
             </>
           ) : (
             <label
-              className={`flex flex-col justify-center items-center w-full h-64 px-4 transition bg-gray-50 border-2 border-gray-200 border-dashed rounded-xl appearance-none cursor-pointer hover:border-blue-400 focus:outline-none ${
+              className={`flex flex-col justify-center items-center w-full h-48 sm:h-64 px-4 transition bg-gray-50 border-2 border-gray-200 border-dashed rounded-xl appearance-none cursor-pointer hover:border-blue-400 focus:outline-none ${
                 isProcessing ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
@@ -275,24 +272,31 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="text-2xl font-normal leading-none">Location</div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+          Location
+        </h2>
         <input
           type="text"
-          className="w-full h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary"
+          className="w-full h-12 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80 backdrop-blur-sm"
           value={formData.location}
           onChange={(e) =>
             setFormData({ ...formData, location: e.target.value })
           }
+          placeholder="Enter location"
           required
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="text-2xl font-normal leading-none">Date & Time</div>
-        <div className="flex gap-2">
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+          Date & Time
+        </h2>
+        <div className="flex gap-3">
           <input
             type="date"
-            className="flex-1 h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary bg-background"
+            className="flex-1 h-12 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80 backdrop-blur-sm"
             value={
               formData.date instanceof Date && !isNaN(formData.date.getTime())
                 ? formatDateForInput(formData.date)
@@ -313,7 +317,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
           />
           <input
             type="time"
-            className="flex-1 h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary bg-background"
+            className="flex-1 h-12 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80 backdrop-blur-sm"
             value={
               formData.date instanceof Date && !isNaN(formData.date.getTime())
                 ? formatTimeForInput(formData.date)
@@ -334,10 +338,13 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="text-2xl font-normal leading-none">Problem</div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+          Problem
+        </h2>
         <textarea
-          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary resize-none colors-text"
+          className="w-full h-32 sm:h-40 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none bg-white/80 backdrop-blur-sm"
           value={formData.problem}
           onChange={(e) =>
             setFormData({
@@ -345,13 +352,17 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
               problem: e.target.value,
             })
           }
+          placeholder="Describe the problem..."
           required
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="text-2xl font-normal leading-none">Solution</div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+          Solution
+        </h2>
         <textarea
-          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary resize-none colors-text"
+          className="w-full h-32 sm:h-40 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none bg-white/80 backdrop-blur-sm"
           value={formData.solve}
           onChange={(e) =>
             setFormData({
@@ -359,13 +370,17 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
               solve: e.target.value,
             })
           }
+          placeholder="Describe the solution..."
           required
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="text-2xl font-normal leading-none">Description</div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+          Description
+        </h2>
         <textarea
-          className="w-full h-40 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary resize-none colors-text"
+          className="w-full h-32 sm:h-40 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none bg-white/80 backdrop-blur-sm"
           value={formData.description}
           onChange={(e) =>
             setFormData({
@@ -373,13 +388,15 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
               description: e.target.value,
             })
           }
+          placeholder="Additional details..."
           required
         />
       </div>
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background/60 to-transparent h-24 flex items-end">
+
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white/80 to-transparent h-24 flex items-end z-50">
         <button
           type="submit"
-          className="bg-primary text-white py-2 px-4 rounded-xl w-full disabled:opacity-50"
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white py-3 px-6 rounded-xl w-full disabled:opacity-50 font-medium transition-colors shadow-lg"
           disabled={isSubmitting || isProcessing}
         >
           {isSubmitting

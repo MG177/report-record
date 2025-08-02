@@ -24,15 +24,18 @@ export default function Button({
   type = 'button',
   className = '',
 }: ButtonProps) {
-  // Base styles with conditional padding based on whether there's text
+  // Base styles with mobile-first approach
   const baseStyles = `${
-    text ? 'px-3' : 'px-3'
-  } py-2.5 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md min-w-[2.5rem]`
+    text ? 'px-4 sm:px-6' : 'px-3'
+  } py-3 sm:py-3.5 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md active:scale-95 min-h-[44px] min-w-[44px] text-sm sm:text-base`
 
   const variantStyles = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white',
-    secondary: 'bg-white border border-blue-200 text-blue-700 hover:bg-blue-50',
-    danger: 'bg-red-600 hover:bg-red-700 text-white',
+    primary:
+      'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-blue-600/25',
+    secondary:
+      'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 active:bg-gray-100 hover:border-gray-300',
+    danger:
+      'bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-red-600/25',
   }
 
   const styles = `${baseStyles} ${variantStyles[variant]} ${className}`
@@ -40,11 +43,11 @@ export default function Button({
   const content = (
     <>
       {icon && iconPos === 'left' && (
-        <i className={`pi ${icon} ${!text ? 'text-base' : ''}`} />
+        <i className={`pi ${icon} ${!text ? 'text-lg' : 'text-base'}`} />
       )}
-      {text}
+      {text && <span className="whitespace-nowrap">{text}</span>}
       {icon && iconPos === 'right' && (
-        <i className={`pi ${icon} ${!text ? 'text-base' : ''}`} />
+        <i className={`pi ${icon} ${!text ? 'text-lg' : 'text-base'}`} />
       )}
     </>
   )
