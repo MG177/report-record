@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ReportDocument } from '@/models/Report'
 import useFetch from '@hooks/useFetch'
@@ -18,7 +18,7 @@ import {
 import Link from 'next/link'
 import { formatDateTimeForDisplay } from '@utils/dateUtils'
 
-export default function CalendarView() {
+function CalendarViewContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -414,5 +414,18 @@ export default function CalendarView() {
       {/* Bottom Spacing for Mobile */}
       <div className="h-20 sm:hidden" />
     </main>
+  )
+}
+
+// Loading fallback for Suspense
+function CalendarLoading() {
+  return <Loading />
+}
+
+export default function CalendarView() {
+  return (
+    <Suspense fallback={<CalendarLoading />}>
+      <CalendarViewContent />
+    </Suspense>
   )
 }
