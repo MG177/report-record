@@ -10,7 +10,7 @@ interface HeadingProps {
 
 export default function HeaderDefault({ title, description }: HeadingProps) {
   return (
-    <div className="w-full mb-6">
+    <div className="w-full z-10">
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">

@@ -82,16 +82,17 @@ export default function Home() {
       <HeaderDefault title="Reports" />
 
       {/* Floating Search Bar */}
-      <div className="sticky top-4 z-10 mb-6">
+      {/* <div className="sticky top-4 z-10 my-6"> */}
+      <div className=" top-4 z-10 my-6">
         <div className="relative">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="h-5 w-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-20" />
             <input
               type="text"
               placeholder="Search reports..."
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-12 pr-20 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
+              className="w-full pl-12 pr-20 py-4 bg-white border border-gray-200 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
             />
             <button
               onClick={() => setShowFilters(!showFilters)}
