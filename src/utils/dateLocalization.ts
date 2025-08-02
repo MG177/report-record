@@ -7,15 +7,35 @@ type LocaleType = 'id' | 'en'
 
 const locales: Record<LocaleType, Locale> = {
   id,
-  en: enUS
+  en: enUS,
 }
 
 const dateFormats: Record<DateFormat, string> = {
   full: 'MMMM dd, yyyy hh:mm aa zzz', // US format with 12-hour time
-  short: 'MM/dd/yyyy',                 // US format MM/DD/YYYY
-  time: 'hh:mm aa zzz',               // 12-hour time with AM/PM
+  short: 'MM/dd/yyyy', // US format MM/DD/YYYY
+  time: 'hh:mm aa zzz', // 12-hour time with AM/PM
   relative: '',
-  distance: ''
+  distance: '',
+}
+
+/**
+ * Creates a proper local date from date and time strings
+ * Handles timezone conversion correctly
+ *
+ * @param dateString - Date string in YYYY-MM-DD format
+ * @param timeString - Time string in HH:MM format
+ * @returns Date object in local timezone
+ */
+export function createLocalDateTime(
+  dateString: string,
+  timeString: string
+): Date {
+  const [year, month, day] = dateString.split('-').map(Number)
+  const [hours, minutes] = timeString.split(':').map(Number)
+
+  // Create date in local timezone
+  const localDate = new Date(year, month - 1, day, hours, minutes, 0, 0)
+  return localDate
 }
 
 /**
@@ -33,18 +53,18 @@ interface DateOptions {
 
 /**
  * Formats a date with proper time zone and localization support
- * 
+ *
  * @param date - Date to format
  * @param options - Formatting options
  * @returns Formatted date string
- * 
+ *
  * @example
  * // Using browser's time zone
  * formatDate(new Date())  // "August 14, 2024 11:22 AM EDT"
- * 
+ *
  * // Using specific time zone
  * formatDate(new Date(), { timeZone: 'America/New_York' })
- * 
+ *
  * // Short format
  * formatDate(new Date(), { formatType: 'short' })  // "08/14/2024"
  */
@@ -55,7 +75,7 @@ export function formatDate(
   const {
     formatType = 'full',
     locale = 'en', // Default to English locale
-    timeZone = getUserTimeZone()
+    timeZone = getUserTimeZone(),
   } = options
 
   const dateObj = new Date(date)
@@ -68,23 +88,23 @@ export function formatDate(
     case 'distance':
       return formatDistance(zonedDate, new Date(), {
         locale: selectedLocale,
-        addSuffix: true
+        addSuffix: true,
       })
     default:
       return format(zonedDate, dateFormats[formatType], {
         locale: selectedLocale,
-        timeZone
+        timeZone,
       })
   }
 }
 
 /**
  * Formats a date into a date-time object with proper time zone support
- * 
+ *
  * @param date - Date to format
  * @param options - Formatting options
  * @returns Object containing formatted date and time
- * 
+ *
  * @example
  * // Using browser's time zone
  * formatDateTime(new Date())  // { date: "08/14/2024", time: "11:22 AM EDT" }
@@ -97,6 +117,6 @@ export function formatDateTime(
 
   return {
     date: formatDate(date, { formatType: 'short', locale, timeZone }),
-    time: formatDate(date, { formatType: 'time', locale, timeZone })
+    time: formatDate(date, { formatType: 'time', locale, timeZone }),
   }
 }

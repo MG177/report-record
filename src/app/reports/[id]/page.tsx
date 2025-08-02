@@ -7,7 +7,7 @@ import Loading from '@/app/components/Loading'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
-import convertDate from '@utils/convertDate'
+import { formatDateTimeForDisplay } from '@utils/dateUtils'
 
 export default function ReportDetail() {
   const params = useParams()
@@ -47,7 +47,7 @@ export default function ReportDetail() {
     )
   }
 
-  const reportDate = convertDate(report.date.toString())
+  const reportDateTime = formatDateTimeForDisplay(report.date.toString())
 
   return (
     <main className="min-h-screen py-8">
@@ -73,7 +73,7 @@ export default function ReportDetail() {
                     {report.location}
                   </div>
                   <div className="text-sm text-gray-500">
-                    {reportDate.date} at {reportDate.time}
+                    {reportDateTime.date} at {reportDateTime.time}
                   </div>
                 </div>
               </div>

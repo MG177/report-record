@@ -67,8 +67,16 @@ export async function GET(req: NextRequest) {
     // Handle date range
     if (startDate || endDate) {
       query.date = {}
-      if (startDate) query.date.$gte = new Date(startDate)
-      if (endDate) query.date.$lte = new Date(endDate)
+      if (startDate) {
+        const start = new Date(startDate)
+        start.setHours(0, 0, 0, 0) // Start of day
+        query.date.$gte = start
+      }
+      if (endDate) {
+        const end = new Date(endDate)
+        end.setHours(23, 59, 59, 999) // End of day
+        query.date.$lte = end
+      }
     }
 
     // Handle status and priority filters

@@ -40,7 +40,7 @@ export async function PUT(
       params.id,
       {
         ...body,
-        date: new Date(body.date),
+        date: body.date ? new Date(body.date) : undefined,
       },
       { new: true }
     )

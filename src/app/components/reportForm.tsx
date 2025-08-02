@@ -7,6 +7,12 @@ import {
   formatFileSize,
   CompressionResult,
 } from '@utils/imageCompression'
+import { createLocalDateTime } from '@utils/dateLocalization'
+import {
+  formatDateForInput,
+  formatTimeForInput,
+  getCurrentDate,
+} from '@utils/dateUtils'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
 
@@ -28,7 +34,7 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
     problem: '',
     solve: '',
     images: [],
-    date: new Date(),
+    date: getCurrentDate(),
     description: '',
     status: 'pending',
     priority: 'medium',
@@ -283,22 +289,50 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
       </div>
       <div className="flex flex-col gap-2">
         <div className="text-2xl font-normal leading-none">Date & Time</div>
-        <input
-          type="date"
-          className="w-full h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary bg-background"
-          value={
-            formData.date instanceof Date && !isNaN(formData.date.getTime())
-              ? formData.date.toISOString().split('T')[0]
-              : ''
-          }
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              date: new Date(e.target.value),
-            })
-          }
-          required
-        />
+        <div className="flex gap-2">
+          <input
+            type="date"
+            className="flex-1 h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary bg-background"
+            value={
+              formData.date instanceof Date && !isNaN(formData.date.getTime())
+                ? formatDateForInput(formData.date)
+                : ''
+            }
+            onChange={(e) => {
+              const dateValue =
+                formData.date instanceof Date
+                  ? formData.date.toISOString().split('T')[0]
+                  : new Date().toISOString().split('T')[0]
+              const newDate = createLocalDateTime(dateValue, e.target.value)
+              setFormData({
+                ...formData,
+                date: newDate,
+              })
+            }}
+            required
+          />
+          <input
+            type="time"
+            className="flex-1 h-10 py-1 px-2 rounded-xl border-2 border-primary/50 outline-2 outline-primary bg-background"
+            value={
+              formData.date instanceof Date && !isNaN(formData.date.getTime())
+                ? formatTimeForInput(formData.date)
+                : ''
+            }
+            onChange={(e) => {
+              const timeValue =
+                formData.date instanceof Date
+                  ? formData.date.toTimeString().slice(0, 5)
+                  : new Date().toTimeString().slice(0, 5)
+              const newDate = createLocalDateTime(e.target.value, timeValue)
+              setFormData({
+                ...formData,
+                date: newDate,
+              })
+            }}
+            required
+          />
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         <div className="text-2xl font-normal leading-none">Problem</div>

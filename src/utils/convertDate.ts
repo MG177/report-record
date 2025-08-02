@@ -9,27 +9,19 @@ import { formatDateTime } from './dateLocalization'
  *          Example:
  *          {
  *              date: "08/14/2024",
- *              time: "11:22 GMT+8" // Time zone will be based on user's location
+ *              time: "11:22 AM EDT" // Time zone will be based on user's location
  *          }
  */
 export default function convertDate(isoString: string): {
   date: string
   time: string
 } {
-  // return formatDateTime(isoString)
-  const date = new Date(isoString) // Convert the string into a Date object
+  return formatDateTime(isoString, { timeZone: getUserTimeZone() })
+}
 
-  return {
-    date: date.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-    }),
-    time: date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true,
-    }),
-  }
+/**
+ * Gets the user's local time zone
+ */
+export function getUserTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone
 }

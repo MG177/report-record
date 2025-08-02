@@ -8,6 +8,7 @@ import Loading from '@/app/components/Loading'
 import ReportForm from '@/app/components/reportForm'
 import { toast } from 'react-hot-toast'
 import { ReportCreate } from '@lib/validations/report'
+import { toISOString, fromISOString } from '@utils/dateUtils'
 
 export default function EditReport() {
   const params = useParams()
@@ -30,7 +31,7 @@ export default function EditReport() {
           ...formData,
           date:
             formData.date instanceof Date
-              ? formData.date.toISOString()
+              ? toISOString(formData.date)
               : formData.date,
         }),
       })
@@ -67,7 +68,7 @@ export default function EditReport() {
         <ReportForm
           onSubmit={handleUpdate}
           initialData={{
-            date: new Date(report.date),
+            date: fromISOString(report.date.toString()),
             description: report.description,
             location: report.location,
             problem: report.problem as string,

@@ -13,6 +13,10 @@ const nextConfig = {
     config.resolve.alias['@lib'] = path.resolve(__dirname, 'src/lib')
     config.resolve.alias['@app'] = path.resolve(__dirname, 'src/app')
     config.resolve.alias['@hooks'] = path.resolve(__dirname, 'src/hooks')
+    config.resolve.alias['@dateUtils'] = path.resolve(
+      __dirname,
+      'src/utils/dateUtils'
+    )
     return config
   },
 }

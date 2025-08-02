@@ -7,8 +7,9 @@ export const reportCreateSchema = z.object({
   images: z.array(z.string()).optional(),
   description: z.string().optional(),
   date: z
-    .string()
-    .or(z.date())
+    .union([z.string().datetime(), z.date()])
+    .transform((val) => (typeof val === 'string' ? new Date(val) : val))
+    .refine((date) => !isNaN(date.getTime()), 'Invalid date')
     .default(() => new Date()),
   status: z
     .enum(['pending', 'in-progress', 'resolved', 'cancelled'])

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { HeaderNewReports } from '@/app/components/header'
 import ReportForm from '@/app/components/reportForm'
 import { ReportCreate } from '@lib/validations/report'
+import { toISOString } from '@utils/dateUtils'
 
 export default function CreateReport() {
   const router = useRouter()
@@ -17,7 +18,10 @@ export default function CreateReport() {
         },
         body: JSON.stringify({
           ...formData,
-          date: formData.date?.toString() || '',
+          date:
+            formData.date instanceof Date
+              ? toISOString(formData.date)
+              : formData.date,
         }),
       })
 

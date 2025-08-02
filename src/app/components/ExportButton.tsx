@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Button from './button'
 import Modal from './modal'
 import { exportObjectToXLS } from '@utils/exportXLS'
-import convertDate from '@utils/convertDate'
+import { formatDateTimeForDisplay } from '@utils/dateUtils'
 import { toast } from 'react-hot-toast'
 
 interface DateInputProps {
@@ -75,15 +75,18 @@ export default function ExportButton() {
 
       const baseUrl = window.location.origin
       const formattedData = reports.map(
-        ({ _id, date, location, problem, solve, description }) => ({
-          Date: convertDate(date).date,
-          // Time: convertDate(date).time,
-          Location: location,
-          Problem: problem || '',
-          Solution: solve || '',
-          Description: description || '',
-          'View Details': `${baseUrl}/reports/${_id}`,
-        })
+        ({ _id, date, location, problem, solve, description }) => {
+          const reportDateTime = formatDateTimeForDisplay(date)
+          return {
+            Date: reportDateTime.date,
+            Time: reportDateTime.time,
+            Location: location,
+            Problem: problem || '',
+            Solution: solve || '',
+            Description: description || '',
+            'View Details': `${baseUrl}/reports/${_id}`,
+          }
+        }
       )
 
       exportObjectToXLS(formattedData)

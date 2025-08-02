@@ -1,5 +1,5 @@
 import { IReport, ReportDocument } from '@/models/Report'
-import convertDate from '@utils/convertDate'
+import { formatDateTimeForDisplay } from '@utils/dateUtils'
 import React, { useState } from 'react'
 import Button from './button'
 import Modal from './modal'
@@ -13,7 +13,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  const reportDate = convertDate(report.date.toString())
+  const reportDateTime = formatDateTimeForDisplay(report.date.toString())
 
   const handleDelete = async () => {
     try {
@@ -80,10 +80,9 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
               <span className="text-gray-900 text-xl font-semibold">
                 {report.location}
               </span>
-              <span className="text-gray-500 text-sm">
-                {/* {reportDate.time} |  */}
-                {reportDate.date}
-              </span>
+              <div className="text-sm text-gray-500">
+                {reportDateTime.date} at {reportDateTime.time}
+              </div>
             </div>
           </div>
           <div className="flex gap-2 self-end sm:self-auto">
