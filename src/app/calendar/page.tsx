@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ReportDocument } from '@/models/Report'
 import useFetch from '@hooks/useFetch'
 import Loading from '@/app/components/Loading'
@@ -20,11 +20,63 @@ import { formatDateTimeForDisplay } from '@utils/dateUtils'
 
 export default function CalendarView() {
   const router = useRouter()
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const searchParams = useSearchParams()
+
+  // Get initial date from URL params or use current date
+  const getInitialDate = () => {
+    const yearParam = searchParams.get('year')
+    const monthParam = searchParams.get('month')
+    const dayParam = searchParams.get('day')
+
+    if (yearParam && monthParam) {
+      const year = parseInt(yearParam)
+      const month = parseInt(monthParam) - 1 // Month is 0-indexed
+      const day = dayParam ? parseInt(dayParam) : 1
+      return new Date(year, month, day)
+    }
+    return new Date()
+  }
+
+  const [currentDate, setCurrentDate] = useState(getInitialDate)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(() => {
+    const dayParam = searchParams.get('day')
+    if (dayParam) {
+      const year = parseInt(
+        searchParams.get('year') || new Date().getFullYear().toString()
+      )
+      const month =
+        parseInt(
+          searchParams.get('month') || (new Date().getMonth() + 1).toString()
+        ) - 1
+      const day = parseInt(dayParam)
+      return new Date(year, month, day)
+    }
+    return null
+  })
   const [reports, setReports] = useState<ReportDocument[]>([])
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<'month' | 'week'>('month')
+
+  // Update URL when currentDate or selectedDate changes
+  const updateURL = useCallback(
+    (newCurrentDate: Date, newSelectedDate: Date | null) => {
+      const params = new URLSearchParams()
+      params.set('year', newCurrentDate.getFullYear().toString())
+      params.set('month', (newCurrentDate.getMonth() + 1).toString())
+
+      if (newSelectedDate) {
+        params.set('day', newSelectedDate.getDate().toString())
+      }
+
+      const newURL = `${window.location.pathname}?${params.toString()}`
+      window.history.replaceState({}, '', newURL)
+    },
+    []
+  )
+
+  // Update URL when dates change
+  useEffect(() => {
+    updateURL(currentDate, selectedDate)
+  }, [currentDate, selectedDate, updateURL])
 
   // Get current month's start and end dates
   const startOfMonth = new Date(
@@ -108,8 +160,14 @@ export default function CalendarView() {
 
   // Navigate to today
   const goToToday = () => {
-    setCurrentDate(new Date())
+    const today = new Date()
+    setCurrentDate(today)
     setSelectedDate(null)
+  }
+
+  // Handle date selection
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date)
   }
 
   const calendarDays = generateCalendarDays()
@@ -199,28 +257,6 @@ export default function CalendarView() {
             >
               Today
             </button>
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setViewMode('month')}
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'month'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Month
-              </button>
-              <button
-                onClick={() => setViewMode('week')}
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'week'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Week
-              </button>
-            </div>
           </div>
         </div>
 
@@ -247,7 +283,7 @@ export default function CalendarView() {
             return (
               <div
                 key={index}
-                onClick={() => setSelectedDate(day)}
+                onClick={() => handleDateSelect(day)}
                 className={`
                   min-h-[100px] sm:min-h-[120px] p-2 border border-gray-100 rounded-lg cursor-pointer transition-all
                   ${isCurrentMonth ? 'bg-white' : 'bg-gray-50'}
@@ -366,35 +402,6 @@ export default function CalendarView() {
                           {report.problem}
                         </p>
                       </div>
-                      {/* <div className="flex-shrink-0">
-                        <span
-                          className={`
-                          inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                          ${
-                            report.status === 'resolved'
-                              ? 'bg-green-100 text-green-800'
-                              : ''
-                          }
-                          ${
-                            report.status === 'in-progress'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : ''
-                          }
-                          ${
-                            report.status === 'pending'
-                              ? 'bg-blue-100 text-blue-800'
-                              : ''
-                          }
-                          ${
-                            report.status === 'cancelled'
-                              ? 'bg-red-100 text-red-800'
-                              : ''
-                          }
-                        `}
-                        >
-                          {report.status}
-                        </span>
-                      </div> */}
                     </div>
                   </div>
                 )
