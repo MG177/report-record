@@ -54,13 +54,13 @@ async function setTimezone(page: Page, timezone: string) {
 
     // Override Date methods to use the timezone
     const originalDate = Date
-    Date = function (...args: any[]) {
-      if (args.length === 0) {
+    Date = function (args?: any) {
+      if (args === undefined) {
         return new originalDate()
       }
-      return new originalDate(...args)
+      return new originalDate(args)
     } as any
-    Date.prototype = originalDate.prototype
+    Object.setPrototypeOf(Date, originalDate)
     Date.now = originalDate.now
     Date.parse = originalDate.parse
     Date.UTC = originalDate.UTC
