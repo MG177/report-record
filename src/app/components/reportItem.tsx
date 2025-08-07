@@ -1,5 +1,5 @@
 import { IReport, ReportDocument } from '@/models/Report'
-import { formatDateTimeForDisplay } from '@utils/dateUtils'
+import { formatDateTimeForDisplay } from '@utils/timezoneUtils'
 import React, { useState } from 'react'
 import Button from './button'
 import Modal from './modal'
@@ -22,7 +22,7 @@ const ReportItem: React.FC<ReportItemProps> = ({ report }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isImageModalOpen, setIsImageModalOpen] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  const reportDateTime = formatDateTimeForDisplay(report.date.toString())
+  const reportDateTime = formatDateTimeForDisplay(report.date)
 
   const handleDelete = async () => {
     try {

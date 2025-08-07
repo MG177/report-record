@@ -7,12 +7,13 @@ import {
   formatFileSize,
   CompressionResult,
 } from '@utils/imageCompression'
-import { createLocalDateTime } from '@utils/dateLocalization'
 import {
+  createUTCFromLocalInput,
   formatDateForInput,
   formatTimeForInput,
-  getCurrentDate,
-} from '@utils/dateUtils'
+  getUserTimeZone,
+} from '@utils/timezoneUtils'
+import { getCurrentDate } from '@utils/dateUtils'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
 
@@ -299,15 +300,19 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
             className="flex-1 h-12 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80 backdrop-blur-sm"
             value={
               formData.date instanceof Date && !isNaN(formData.date.getTime())
-                ? formatDateForInput(formData.date)
+                ? formatDateForInput(formData.date, getUserTimeZone())
                 : ''
             }
             onChange={(e) => {
-              const dateValue =
+              const timeValue =
                 formData.date instanceof Date
-                  ? formData.date.toISOString().split('T')[0]
-                  : new Date().toISOString().split('T')[0]
-              const newDate = createLocalDateTime(dateValue, e.target.value)
+                  ? formatTimeForInput(formData.date, getUserTimeZone())
+                  : new Date().toTimeString().slice(0, 5)
+              const newDate = createUTCFromLocalInput(
+                e.target.value,
+                timeValue,
+                getUserTimeZone()
+              )
               setFormData({
                 ...formData,
                 date: newDate,
@@ -320,15 +325,19 @@ export default function ReportForm({ onSubmit, initialData }: ReportFormProps) {
             className="flex-1 h-12 py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80 backdrop-blur-sm"
             value={
               formData.date instanceof Date && !isNaN(formData.date.getTime())
-                ? formatTimeForInput(formData.date)
+                ? formatTimeForInput(formData.date, getUserTimeZone())
                 : ''
             }
             onChange={(e) => {
-              const timeValue =
+              const dateValue =
                 formData.date instanceof Date
-                  ? formData.date.toTimeString().slice(0, 5)
-                  : new Date().toTimeString().slice(0, 5)
-              const newDate = createLocalDateTime(e.target.value, timeValue)
+                  ? formatDateForInput(formData.date, getUserTimeZone())
+                  : new Date().toISOString().split('T')[0]
+              const newDate = createUTCFromLocalInput(
+                dateValue,
+                e.target.value,
+                getUserTimeZone()
+              )
               setFormData({
                 ...formData,
                 date: newDate,

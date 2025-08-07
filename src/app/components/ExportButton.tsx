@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Button from './button'
 import Modal from './modal'
 import { exportObjectToXLS } from '@utils/exportXLS'
-import { formatDateTimeForDisplay } from '@utils/dateUtils'
+import { formatDateTimeForDisplay } from '@utils/timezoneUtils'
 import { toast } from 'react-hot-toast'
 
 interface DateInputProps {

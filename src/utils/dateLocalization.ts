@@ -19,23 +19,47 @@ const dateFormats: Record<DateFormat, string> = {
 }
 
 /**
- * Creates a proper local date from date and time strings
- * Handles timezone conversion correctly
+ * Creates a proper timezone-aware date from date and time strings
+ * Converts local date/time to UTC for storage
  *
  * @param dateString - Date string in YYYY-MM-DD format
  * @param timeString - Time string in HH:MM format
- * @returns Date object in local timezone
+ * @param timeZone - Target timezone (defaults to user's timezone)
+ * @returns UTC Date object for storage
  */
-export function createLocalDateTime(
+export function createTimeZoneAwareDateTime(
   dateString: string,
-  timeString: string
+  timeString: string,
+  timeZone: string = getUserTimeZone()
 ): Date {
   const [year, month, day] = dateString.split('-').map(Number)
   const [hours, minutes] = timeString.split(':').map(Number)
 
-  // Create date in local timezone
-  const localDate = new Date(year, month - 1, day, hours, minutes, 0, 0)
-  return localDate
+  // Create date string in the target timezone
+  const dateTimeString = `${year}-${month.toString().padStart(2, '0')}-${day
+    .toString()
+    .padStart(2, '0')}T${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:00`
+
+  // Create a date object and convert it to the target timezone, then get UTC
+  const localDate = new Date(dateTimeString)
+  const zonedDate = toZonedTime(localDate, timeZone)
+  return zonedDate
+}
+
+/**
+ * Converts a UTC date back to a specific timezone for display
+ *
+ * @param utcDate - UTC Date object from database
+ * @param timeZone - Target timezone for display
+ * @returns Date object in target timezone
+ */
+export function convertUTCToTimeZone(
+  utcDate: Date,
+  timeZone: string = getUserTimeZone()
+): Date {
+  return toZonedTime(utcDate, timeZone)
 }
 
 /**
@@ -43,6 +67,34 @@ export function createLocalDateTime(
  */
 export function getUserTimeZone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone
+}
+
+/**
+ * Formats a date for HTML date input (YYYY-MM-DD) in a specific timezone
+ * @param date - UTC Date object
+ * @param timeZone - Target timezone
+ * @returns Date string for HTML input
+ */
+export function formatDateForInputInTimeZone(
+  date: Date,
+  timeZone: string = getUserTimeZone()
+): string {
+  const zonedDate = toZonedTime(date, timeZone)
+  return format(zonedDate, 'yyyy-MM-dd', { timeZone })
+}
+
+/**
+ * Formats a time for HTML time input (HH:MM) in a specific timezone
+ * @param date - UTC Date object
+ * @param timeZone - Target timezone
+ * @returns Time string for HTML input
+ */
+export function formatTimeForInputInTimeZone(
+  date: Date,
+  timeZone: string = getUserTimeZone()
+): string {
+  const zonedDate = toZonedTime(date, timeZone)
+  return format(zonedDate, 'HH:mm', { timeZone })
 }
 
 interface DateOptions {

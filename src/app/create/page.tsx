@@ -11,6 +11,23 @@ export default function CreateReport() {
 
   const handleSubmit = async (formData: ReportCreate) => {
     try {
+      // Ensure we have a valid date
+      let dateToSend: string
+      if (formData.date instanceof Date && !isNaN(formData.date.getTime())) {
+        dateToSend = toISOString(formData.date)
+      } else if (typeof formData.date === 'string') {
+        // If it's already a string, validate it's a proper ISO string
+        const parsedDate = new Date(formData.date)
+        if (!isNaN(parsedDate.getTime())) {
+          dateToSend = formData.date
+        } else {
+          throw new Error('Invalid date format')
+        }
+      } else {
+        // Fallback to current date
+        dateToSend = toISOString(new Date())
+      }
+
       const response = await fetch('/api/reports', {
         method: 'POST',
         headers: {
@@ -18,10 +35,7 @@ export default function CreateReport() {
         },
         body: JSON.stringify({
           ...formData,
-          date:
-            formData.date instanceof Date
-              ? toISOString(formData.date)
-              : formData.date,
+          date: dateToSend,
         }),
       })
 
