@@ -7,7 +7,7 @@ import Loading from '@/app/components/Loading'
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
-import { formatDateTimeForDisplay } from '@utils/timezoneUtils'
+import { formatDateTimeForDisplay } from '@utils/dateUtils'
 
 export default function ReportDetail() {
   const params = useParams()

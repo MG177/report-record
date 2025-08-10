@@ -1,5 +1,5 @@
 import { IReport, ReportDocument } from '@/models/Report'
-import { formatDateTimeForDisplay } from '@utils/timezoneUtils'
+import { formatDateTimeForDisplay } from '@utils/dateUtils'
 import React, { useState } from 'react'
 import Button from './button'
 import Modal from './modal'

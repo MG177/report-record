@@ -375,7 +375,7 @@ function CalendarViewContent() {
             <div className="space-y-4">
               {getReportsForDate(selectedDate).map((report, index) => {
                 const reportDateTime = formatDateTimeForDisplay(
-                  report.date.toString()
+                  new Date(report.date)
                 )
                 return (
                   <div

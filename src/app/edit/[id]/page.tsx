@@ -8,7 +8,11 @@ import Loading from '@/app/components/Loading'
 import ReportForm from '@/app/components/reportForm'
 import { toast } from 'react-hot-toast'
 import { ReportCreate } from '@lib/validations/report'
-import { toISOString, fromISOString } from '@utils/dateUtils'
+import {
+  convertUTCToTimeZone,
+  getUserTimeZone,
+  toISOStringWithTimeZone,
+} from '@utils/dateUtils'
 
 export default function EditReport() {
   const params = useParams()
@@ -31,7 +35,7 @@ export default function EditReport() {
           ...formData,
           date:
             formData.date instanceof Date
-              ? toISOString(formData.date)
+              ? toISOStringWithTimeZone(formData.date, getUserTimeZone())
               : formData.date,
         }),
       })
@@ -68,7 +72,7 @@ export default function EditReport() {
         <ReportForm
           onSubmit={handleUpdate}
           initialData={{
-            date: fromISOString(report.date.toString()),
+            date: convertUTCToTimeZone(report.date, getUserTimeZone()),
             description: report.description,
             location: report.location,
             problem: report.problem as string,
